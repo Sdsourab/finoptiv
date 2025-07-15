@@ -4,12 +4,12 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 14.2 (Firebase Configuration Guidance)
+    Version: 15.0 (Finalized with Security & Image Uploads)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
-    Date: July 15, 2025
-    Description: The code is correct. This version provides external instructions in Bangla
-                 to guide the user in enabling Anonymous Authentication in the Firebase console,
-                 which is the root cause of the configuration error.
+    Date: July 16, 2025
+    Description: This final version implements critical security and functionality updates.
+                 - Admin actions (add, edit, delete) are now protected by a password (23030127).
+                 - Cover images can be uploaded directly from a local computer via Firebase Storage.
     ================================================================================================
     -->
     <meta charset="UTF-8">
@@ -171,6 +171,7 @@
         .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--gradient-main); transition: width 0.4s ease; }
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         .nav-link.active { color: var(--text-dark); }
+        #addArticleLink.protected::after { content: " \f023"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: 0.8em; opacity: 0.7; }
         .mobile-menu-btn { display: none; background: none; border: none; color: inherit; font-size: 1.5rem; cursor: pointer; z-index: 1001; }
         .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
         .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
@@ -245,6 +246,7 @@
         .color-swatch:hover { border-color: white; }
         .submit-btn { display: block; width: 100%; padding: 1.2rem; border: none; border-radius: 8px; background: var(--gradient-main); color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: var(--font-sans); }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(138, 99, 210, 0.4); }
+        .submit-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
 
         /* ABOUT SECTION */
         #about-page-container { font-family: var(--font-sans); }
@@ -272,6 +274,7 @@
         .modal-actions { display: flex; gap: 1rem; justify-content: center; }
         .modal-btn { padding: 0.8rem 1.8rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-family: var(--font-sans); }
         .modal-btn:hover { transform: scale(1.05); }
+        .modal-btn-primary { background: var(--primary-color); color: white; }
         .modal-btn-danger { background: var(--danger-dark); color: white; }
         .modal-btn-cancel { background: #484f58; color: white; }
         .notification { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); padding: 1rem 2rem; border-radius: 8px; color: #fff; font-weight: 500; z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
@@ -298,7 +301,7 @@
                 <a href="#home" class="logo" data-page="home">Finoptiv</a>
                 <div class="nav-links" id="navLinks">
                     <a href="#home" class="nav-link active" data-page="home">Home</a>
-                    <a href="#add-article" class="nav-link" data-page="add-article">Add Article</a>
+                    <a href="#add-article" class="nav-link" id="addArticleLink" data-page="add-article">Add Article</a>
                     <a href="#about" class="nav-link" data-page="about">About</a>
                 </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fa-solid fa-bars"></i></button>
@@ -353,11 +356,16 @@
                     <h2 class="section-title" id="formTitle">Add New Resource</h2>
                     <form id="articleForm">
                         <input type="hidden" id="articleId" value="">
+                        <input type="hidden" id="existingCoverUrl" value="">
                         <div class="form-group"><label for="articleTitle">Article Title</label><input type="text" id="articleTitle" required></div>
                         <div class="form-group"><label for="articleAuthor">Author Name</label><input type="text" id="articleAuthor" required></div>
                         <div class="form-group"><label for="articleLink">Project or Article Link</label><input type="url" id="articleLink" required></div>
                         <div class="form-group"><label for="articleCategory">Category (Tag)</label><input type="text" id="articleCategory" required placeholder="e.g., FinTech, DeFi, Investment"></div>
-                        <div class="form-group"><label for="articleCover">Cover Image (URL)</label><input type="url" id="articleCover" placeholder="https://example.com/image.jpg"></div>
+                        <div class="form-group">
+                            <label for="articleCoverFile">Upload Cover Image</label>
+                            <input type="file" id="articleCoverFile" accept="image/*" class="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+                            <p class="text-sm text-slate-500 mt-2">Or leave empty to keep the existing image when editing.</p>
+                        </div>
                         <div class="form-group">
                             <label for="articleExcerpt">Excerpt (Markdown supported)</label>
                             <div class="markdown-toolbar" id="markdownToolbar">
@@ -451,12 +459,29 @@
             </div>
         </div>
     </div>
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Admin Access Required</h3>
+            <p>Please enter the administrator password to proceed.</p>
+            <form id="passwordForm">
+                <div class="form-group" style="text-align: left;">
+                    <label for="adminPassword" class="sr-only">Password</label>
+                    <input type="password" id="adminPassword" class="search-input" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="modal-btn modal-btn-primary">Login</button>
+                    <button type="button" id="passwordCancelBtn" class="modal-btn modal-btn-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- FIREBASE SDK -->
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
         import { 
             getFirestore, 
             collection, 
@@ -475,7 +500,7 @@
             apiKey: "AIzaSyD6I69sU5_7C8q2UK7kOKdgNFca-mgmgYw",
             authDomain: "finoptiv-database.firebaseapp.com",
             projectId: "finoptiv-database",
-            storageBucket: "finoptiv-database.appspot.com", // Corrected storage bucket name
+            storageBucket: "finoptiv-database.appspot.com",
             messagingSenderId: "604591156466",
             appId: "1:604591156466:web:2f5bf243eacaacab16346b",
             measurementId: "G-DWHPNXE8HL"
@@ -485,6 +510,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app); // Initialize Firebase Storage
         const articlesCollection = collection(db, 'articles');
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -508,6 +534,8 @@
                 visibleArticleCount: 8,
                 articlesPerLoad: 8,
                 user: null,
+                isAdmin: false, // Security: track admin status
+                adminPassword: "23030127" // Security: the admin password
             };
 
             // --- DOM ELEMENT SELECTION ---
@@ -517,7 +545,11 @@
                 searchInput: document.getElementById('searchInput'),
                 pages: document.querySelectorAll('.page'),
                 navLinksAll: document.querySelectorAll('.nav-link, .logo'),
+                addArticleLink: document.getElementById('addArticleLink'),
                 confirmModal: document.getElementById('confirmModal'),
+                passwordModal: document.getElementById('passwordModal'),
+                passwordForm: document.getElementById('passwordForm'),
+                passwordCancelBtn: document.getElementById('passwordCancelBtn'),
                 mobileMenuBtn: document.getElementById('mobileMenuBtn'),
                 navLinks: document.getElementById('navLinks'),
                 mobileMenuOverlay: document.getElementById('mobileMenuOverlay'),
@@ -583,11 +615,15 @@
                         const placeholderImg = `https://placehold.co/600x400/161b22/c9d1d9?text=${encodeURIComponent(article.category)}`;
                         const excerptHtml = markdownConverter.makeHtml(article.excerpt);
                         
-                        card.innerHTML = `
+                        // Security: Only show admin actions if isAdmin is true
+                        const adminActions = state.isAdmin ? `
                             <div class="article-actions">
                                 <button class="action-btn edit-btn" data-id="${article.id}" aria-label="Edit article"><i class="fa-solid fa-pen"></i></button>
                                 <button class="action-btn remove-btn" data-id="${article.id}" aria-label="Remove article"><i class="fa-solid fa-trash"></i></button>
-                            </div>
+                            </div>` : '';
+
+                        card.innerHTML = `
+                            ${adminActions}
                             <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="article-cover-link">
                                 <img src="${article.cover || placeholderImg}" alt="${article.title}" class="article-cover-image" onerror="this.src='${placeholderImg}';">
                             </a>
@@ -626,10 +662,27 @@
                 if(dom.advancedSocialLinksContainer) dom.advancedSocialLinksContainer.innerHTML = socialHtml;
                 if(dom.footerSocialsContainer) dom.footerSocialsContainer.innerHTML = socialHtml; 
             };
+            
+            const updateAdminUI = () => {
+                // Add a lock icon to the nav link if not admin
+                dom.addArticleLink.classList.toggle('protected', !state.isAdmin);
+                renderArticles(); // Re-render articles to show/hide action buttons
+            };
 
             // --- NAVIGATION & UI BEHAVIORS ---
             const navigateTo = (pageId) => {
                 if (!document.getElementById(pageId)) pageId = 'home';
+                
+                // Security: Check for admin access before showing add-article page
+                if (pageId === 'add-article' && !state.isAdmin) {
+                    showPasswordModal().then(success => {
+                        if (success) {
+                            navigateTo('add-article');
+                        }
+                    });
+                    return;
+                }
+
                 state.currentPage = pageId;
                 if (window.location.hash !== `#${pageId}`) {
                     window.location.hash = pageId;
@@ -658,7 +711,7 @@
             const showNotification = (message, type = 'success') => {
                 dom.notification.textContent = message;
                 dom.notification.className = `notification ${type} show`;
-                setTimeout(() => dom.notification.classList.remove('show'), 5000); // Increased duration for important messages
+                setTimeout(() => dom.notification.classList.remove('show'), 5000);
             };
 
             const showModal = (modalElement) => modalElement.classList.add('show');
@@ -674,6 +727,44 @@
                 const cleanup = () => { hideModal(dom.confirmModal); confirmBtn.removeEventListener('click', onConfirm); cancelBtn.removeEventListener('click', onCancel); };
                 confirmBtn.addEventListener('click', onConfirm);
                 cancelBtn.addEventListener('click', onCancel);
+            });
+            
+            // Security: Password Modal Logic
+            const showPasswordModal = () => new Promise(resolve => {
+                showModal(dom.passwordModal);
+                const passwordInput = document.getElementById('adminPassword');
+                passwordInput.value = '';
+                passwordInput.focus();
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    if (passwordInput.value === state.adminPassword) {
+                        state.isAdmin = true;
+                        updateAdminUI();
+                        showNotification('Admin access granted.', 'success');
+                        cleanup();
+                        resolve(true);
+                    } else {
+                        showNotification('Incorrect password.', 'error');
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                        resolve(false);
+                    }
+                };
+
+                const handleCancel = () => {
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    hideModal(dom.passwordModal);
+                    dom.passwordForm.removeEventListener('submit', handleSubmit);
+                    dom.passwordCancelBtn.removeEventListener('click', handleCancel);
+                };
+
+                dom.passwordForm.addEventListener('submit', handleSubmit);
+                dom.passwordCancelBtn.addEventListener('click', handleCancel);
             });
 
             // --- EVENT LISTENERS ---
@@ -709,31 +800,47 @@
             const resetAndNavigateHome = () => {
                 dom.articleForm.reset();
                 document.getElementById('articleId').value = '';
+                document.getElementById('existingCoverUrl').value = '';
                 state.editingArticleId = null;
                 dom.formTitle.textContent = 'Add New Resource';
                 dom.submitBtn.textContent = 'Publish Article';
+                dom.submitBtn.disabled = false;
                 navigateTo('home');
             };
 
             dom.articleForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!state.user) {
-                    showNotification("You must be signed in to perform this action.", "error");
+                if (!state.isAdmin) { // Security check
+                    showNotification("You do not have permission to perform this action.", "error");
                     return;
                 }
 
+                dom.submitBtn.disabled = true;
+                dom.submitBtn.textContent = 'Processing...';
+
                 const isUpdating = !!state.editingArticleId;
-                
-                const articleData = {
-                    title: document.getElementById('articleTitle').value.trim(),
-                    author: document.getElementById('articleAuthor').value.trim(),
-                    link: document.getElementById('articleLink').value.trim(),
-                    category: document.getElementById('articleCategory').value.trim(),
-                    excerpt: document.getElementById('articleExcerpt').value.trim(),
-                    cover: document.getElementById('articleCover').value.trim(),
-                };
+                const coverFile = document.getElementById('articleCoverFile').files[0];
+                let coverUrl = document.getElementById('existingCoverUrl').value;
 
                 try {
+                    // Handle file upload if a new file is selected
+                    if (coverFile) {
+                        showNotification('Uploading image...', 'success');
+                        const storageRef = ref(storage, `covers/${Date.now()}_${coverFile.name}`);
+                        const snapshot = await uploadBytes(storageRef, coverFile);
+                        coverUrl = await getDownloadURL(snapshot.ref);
+                        showNotification('Image uploaded successfully!', 'success');
+                    }
+
+                    const articleData = {
+                        title: document.getElementById('articleTitle').value.trim(),
+                        author: document.getElementById('articleAuthor').value.trim(),
+                        link: document.getElementById('articleLink').value.trim(),
+                        category: document.getElementById('articleCategory').value.trim(),
+                        excerpt: document.getElementById('articleExcerpt').value.trim(),
+                        cover: coverUrl,
+                    };
+
                     if (isUpdating) {
                         const articleRef = doc(db, 'articles', state.editingArticleId);
                         await updateDoc(articleRef, articleData);
@@ -748,11 +855,16 @@
                     resetAndNavigateHome();
                 } catch (error) {
                     console.error("Error saving article:", error);
-                    showNotification("Failed to save article. Please try again.", "error");
+                    showNotification(`Failed to save article: ${error.message}`, "error");
+                    dom.submitBtn.disabled = false;
+                    dom.submitBtn.textContent = isUpdating ? 'Update Article' : 'Publish Article';
                 }
             });
 
             dom.articlesGrid.addEventListener('click', async (e) => {
+                // Security: All actions within this listener require admin rights.
+                if (!state.isAdmin) return;
+
                 const editButton = e.target.closest('.edit-btn');
                 if (editButton) {
                     const articleId = editButton.dataset.id;
@@ -764,7 +876,7 @@
                         document.getElementById('articleAuthor').value = articleToEdit.author;
                         document.getElementById('articleLink').value = articleToEdit.link;
                         document.getElementById('articleCategory').value = articleToEdit.category;
-                        document.getElementById('articleCover').value = articleToEdit.cover || '';
+                        document.getElementById('existingCoverUrl').value = articleToEdit.cover || '';
                         document.getElementById('articleExcerpt').value = articleToEdit.excerpt;
                         dom.formTitle.textContent = 'Update Article';
                         dom.submitBtn.textContent = 'Update Article';
@@ -780,7 +892,6 @@
                         try {
                             await deleteDoc(doc(db, 'articles', articleId));
                             showNotification('Article removed successfully.', 'success');
-                            // The onSnapshot listener will automatically re-render the list.
                         } catch (error) {
                             console.error("Error removing article:", error);
                             showNotification('Failed to remove article.', 'error');
@@ -821,24 +932,18 @@
             const initializeApp = () => {
                 dom.currentYear.textContent = new Date().getFullYear();
                 renderSocials();
+                updateAdminUI(); // Set initial UI based on admin state
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        // User is signed in anonymously.
                         state.user = user;
                         console.log("Authenticated anonymously with UID:", user.uid);
-                        getArticlesFromFirestore(); // Fetch data now that we are authenticated
+                        getArticlesFromFirestore();
                     } else {
-                        // User is signed out.
                         state.user = null;
-                        // Sign in anonymously
                         signInAnonymously(auth).catch((error) => {
                             console.error("Anonymous sign-in failed:", error);
-                            if (error.code === 'auth/configuration-not-found') {
-                                showNotification("করণীয়: আপনার ফায়ারবেস Authentication সেটিংসে Anonymous sign-in চালু করুন।", "error");
-                            } else {
-                                showNotification(`Authentication failed: ${error.message}. Data cannot be loaded.`, "error");
-                            }
+                            showNotification(`Authentication failed: ${error.message}. Data cannot be loaded.`, "error");
                         });
                     }
                 });
