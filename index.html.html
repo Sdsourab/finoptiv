@@ -4,11 +4,12 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 15.0 (Finalized with Security & Image Uploads)
+    Version: 15.1 (Finalized with Upload Optimization)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
     Date: July 16, 2025
-    Description: This final version implements critical security and functionality updates.
-                 - Admin actions (add, edit, delete) are now protected by a password (23030127).
+    Description: This final version optimizes image uploads for a near-instant experience.
+                 - Implemented client-side image compression to dramatically reduce upload times.
+                 - Admin actions (add, edit, delete) remain protected by a password (23030127).
                  - Cover images can be uploaded directly from a local computer via Firebase Storage.
     ================================================================================================
     -->
@@ -130,6 +131,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- NEW: Image Compression Library -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
 
     <style>
         :root {
@@ -615,7 +618,6 @@
                         const placeholderImg = `https://placehold.co/600x400/161b22/c9d1d9?text=${encodeURIComponent(article.category)}`;
                         const excerptHtml = markdownConverter.makeHtml(article.excerpt);
                         
-                        // Security: Only show admin actions if isAdmin is true
                         const adminActions = state.isAdmin ? `
                             <div class="article-actions">
                                 <button class="action-btn edit-btn" data-id="${article.id}" aria-label="Edit article"><i class="fa-solid fa-pen"></i></button>
@@ -664,16 +666,14 @@
             };
             
             const updateAdminUI = () => {
-                // Add a lock icon to the nav link if not admin
                 dom.addArticleLink.classList.toggle('protected', !state.isAdmin);
-                renderArticles(); // Re-render articles to show/hide action buttons
+                renderArticles();
             };
 
             // --- NAVIGATION & UI BEHAVIORS ---
             const navigateTo = (pageId) => {
                 if (!document.getElementById(pageId)) pageId = 'home';
                 
-                // Security: Check for admin access before showing add-article page
                 if (pageId === 'add-article' && !state.isAdmin) {
                     showPasswordModal().then(success => {
                         if (success) {
@@ -729,7 +729,6 @@
                 cancelBtn.addEventListener('click', onCancel);
             });
             
-            // Security: Password Modal Logic
             const showPasswordModal = () => new Promise(resolve => {
                 showModal(dom.passwordModal);
                 const passwordInput = document.getElementById('adminPassword');
@@ -810,7 +809,7 @@
 
             dom.articleForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!state.isAdmin) { // Security check
+                if (!state.isAdmin) {
                     showNotification("You do not have permission to perform this action.", "error");
                     return;
                 }
@@ -823,13 +822,21 @@
                 let coverUrl = document.getElementById('existingCoverUrl').value;
 
                 try {
-                    // Handle file upload if a new file is selected
+                    // OPTIMIZATION: Handle file upload if a new file is selected
                     if (coverFile) {
-                        showNotification('Uploading image...', 'success');
-                        const storageRef = ref(storage, `covers/${Date.now()}_${coverFile.name}`);
-                        const snapshot = await uploadBytes(storageRef, coverFile);
+                        showNotification('Compressing image...', 'success');
+                        const options = {
+                            maxSizeMB: 1,
+                            maxWidthOrHeight: 1920,
+                            useWebWorker: true,
+                        }
+                        const compressedFile = await imageCompression(coverFile, options);
+                        showNotification('Uploading compressed image...', 'success');
+                        
+                        const storageRef = ref(storage, `covers/${Date.now()}_${compressedFile.name}`);
+                        const snapshot = await uploadBytes(storageRef, compressedFile);
                         coverUrl = await getDownloadURL(snapshot.ref);
-                        showNotification('Image uploaded successfully!', 'success');
+                        showNotification('Image upload complete!', 'success');
                     }
 
                     const articleData = {
@@ -862,7 +869,6 @@
             });
 
             dom.articlesGrid.addEventListener('click', async (e) => {
-                // Security: All actions within this listener require admin rights.
                 if (!state.isAdmin) return;
 
                 const editButton = e.target.closest('.edit-btn');
@@ -932,7 +938,7 @@
             const initializeApp = () => {
                 dom.currentYear.textContent = new Date().getFullYear();
                 renderSocials();
-                updateAdminUI(); // Set initial UI based on admin state
+                updateAdminUI();
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
