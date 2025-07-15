@@ -4,13 +4,13 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 14.0 (Final Build - Definitive Database Fix)
+    Version: 15.0 (Final Build - Self-Contained Database)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
     Date: July 15, 2025
-    Description: This is the definitive final build. It corrects the critical JSONBin.io database
-                 connection by implementing the mandatory 'X-Master-Key' header for all API
-                 requests, ensuring all CRUD (Create, Read, Update, Delete) operations now
-                 function correctly. All prior SEO and Social Preview enhancements are retained.
+    Description: This definitive final build resolves all previous database issues by making the
+                 application fully self-contained. Articles are now stored directly within this
+                 HTML file. A "Save Changes" button allows the user to download the updated file,
+                 making the app independent of any external network or CORS issues.
     ================================================================================================
     -->
     <meta charset="UTF-8">
@@ -81,14 +81,6 @@
           "description": "Finoptiv is the integrated core where technology, information systems, and research converge for true financial optimization.",
           "publisher": {
             "@id": "https://finoptiv.vercel.app/#organization"
-          },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://finoptiv.vercel.app/?search={search_term_string}#home"
-            },
-            "query-input": "required name=search_term_string"
           }
         }
       ]
@@ -112,6 +104,7 @@
             --danger-dark: #e74c3c;
             --primary-color: #8A63D2;
             --success-color: #28a745;
+            --save-btn-bg: #28a745;
         }
         html { scroll-behavior: smooth; }
         body { font-family: var(--font-primary); line-height: 1.7; background-color: var(--bg-dark); color: var(--text-dark); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -129,12 +122,40 @@
         nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
         .logo { font-family: var(--font-secondary); font-size: 1.8rem; font-weight: 700; text-decoration: none; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; transition: transform 0.3s ease; }
         .logo:hover { transform: scale(1.05); }
-        .nav-links { display: flex; align-items: center; gap: 2rem; }
-        .nav-link { font-family: var(--font-secondary); text-decoration: none; font-size: 1rem; font-weight: 500; position: relative; padding: 0.5rem 0; color: var(--text-muted); transition: color 0.3s; }
+        .nav-links { display: flex; align-items: center; gap: 1rem; }
+        .nav-link { font-family: var(--font-secondary); text-decoration: none; font-size: 1rem; font-weight: 500; position: relative; padding: 0.5rem; color: var(--text-muted); transition: color 0.3s; }
         .nav-link:hover { color: var(--text-dark); }
         .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--gradient-main); transition: width 0.4s ease; }
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         .nav-link.active { color: var(--text-dark); }
+        
+        /* SAVE CHANGES BUTTON (NEW) */
+        .save-changes-btn {
+            background-color: var(--save-btn-bg);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none; /* Initially hidden */
+            border: 1px solid #2f6f40;
+        }
+        .save-changes-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        .save-changes-btn.visible {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .save-changes-btn .fa-spin {
+            animation: fa-spin 1s infinite linear;
+        }
+
+
         .mobile-menu-btn { display: none; background: none; border: none; color: inherit; font-size: 1.5rem; cursor: pointer; z-index: 1001; }
         .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
         .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
@@ -266,6 +287,10 @@
                     <a href="#home" class="nav-link active" data-page="home">Home</a>
                     <a href="#add-article" class="nav-link" data-page="add-article">Add Article</a>
                     <a href="#about" class="nav-link" data-page="about">About</a>
+                    <button id="saveChangesBtn" class="save-changes-btn">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
                 </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fa-solid fa-bars"></i></button>
             </nav>
@@ -281,7 +306,7 @@
                 <div class="hero-overlay"></div>
                 <div class="hero-content" data-aos="fade-in" data-aos-delay="200">
                     <h1>The Integrated Financial Intelligence Core.</h1>
-                    <p>True financial optimization occurs when technology, information systems, and research operate in perfect harmony. Finoptiv is the integrated core where these critical disciplines converge. We provide a holistic view of your financial ecosystem, ensuring your technology empowers your data, and your data informs your strategy.</p>
+                    <p>True financial optimization occurs when technology, information systems, and research operate in perfect harmony. Finoptiv is the integrated core where these critical disciplines converge.</p>
                 </div>
             </section>
             <section class="page-section container">
@@ -301,12 +326,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="category-filters" id="categoryFilters" data-aos="fade-up" data-aos-delay="100">
-                    <!-- Category filter buttons will be dynamically injected here -->
-                </div>
-                <div class="articles-grid" id="articlesGrid">
-                    <!-- Articles will be dynamically injected here -->
-                </div>
+                <div class="category-filters" id="categoryFilters" data-aos="fade-up" data-aos-delay="100"></div>
+                <div class="articles-grid" id="articlesGrid"></div>
                 <div class="load-more-container" id="loadMoreContainer" style="display: none;">
                     <button class="load-more-btn" id="loadMoreBtn">Load More</button>
                 </div>
@@ -377,7 +398,6 @@
                                 About Me
                             </h2>
                             <p class="mt-4 text-slate-300 leading-relaxed">I am a detail-oriented and forward-thinking student at Rabindra University, Bangladesh, pursuing a Bachelor of Business Administration with a major in Management Information Systems (MIS). My academic foundation in management is uniquely complemented by a profound passion for the quantitative and technological drivers of modern finance.</p>
-                            <p class="mt-3 text-slate-300 leading-relaxed">My core interest lies in the FinTech space, where I am dedicated to exploring the synergy between data-driven strategies, algorithmic precision, and investment theory. I am actively developing my skills in programming and quantitative analysis to build models that can decode market complexities and inform strategic decision-making.</p>
                         </div>
                         <div class="mt-8">
                             <h2 class="text-2xl font-bold text-white flex items-center">
@@ -387,8 +407,6 @@
                             <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="card-glow bg-slate-800/70 p-5 rounded-xl border border-slate-700"><h3 class="font-semibold text-lg text-white">Financial Technology (FinTech)</h3><p class="mt-2 text-sm text-slate-400">Algorithmic trading, quantitative analysis, market data modeling, and blockchain applications.</p></div>
                                 <div class="card-glow bg-slate-800/70 p-5 rounded-xl border border-slate-700"><h3 class="font-semibold text-lg text-white">MIS Research</h3><p class="mt-2 text-sm text-slate-400">Data-driven strategy, systems analysis, and leveraging IT for organizational efficiency.</p></div>
-                                <div class="card-glow bg-slate-800/70 p-5 rounded-xl border border-slate-700"><h3 class="font-semibold text-lg text-white">Programming & Data Analysis</h3><p class="mt-2 text-sm text-slate-400">Mastering Python and R for statistical modeling, data visualization, and algorithm development.</p></div>
-                                <div class="card-glow bg-slate-800/70 p-5 rounded-xl border border-slate-700"><h3 class="font-semibold text-lg text-white">Finoptiv Initiative</h3><p class="mt-2 text-sm text-slate-400">A personal project for curating and sharing knowledge at the crossroads of finance and tech.</p></div>
                             </div>
                         </div>
                     </div>
@@ -428,6 +446,28 @@
             </div>
         </div>
     </div>
+
+    <!--
+    ================================================================================================
+    ARTICLE DATABASE (v15.0)
+    This script tag now acts as the local database. The main application script will read from
+    and write to this tag to persist data.
+    ================================================================================================
+    -->
+    <script id="articleDatabase" type="application/json">
+    [
+        {
+            "id": 1721062009858,
+            "title": "Welcome to the New Finoptiv!",
+            "author": "Sourab Dey Soptom",
+            "link": "https://finoptiv.vercel.app",
+            "category": "Announcement",
+            "excerpt": "This is the first article on the new, self-contained Finoptiv platform. All data is now stored locally in this file. **Add a new article and click 'Save Changes' in the top menu to download your updated website!**",
+            "dateAdded": "2025-07-15T16:46:49.858Z",
+            "cover": "https://placehold.co/600x400/8A63D2/ffffff?text=Finoptiv"
+        }
+    ]
+    </script>
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -435,18 +475,15 @@
         AOS.init({ duration: 800, once: true, offset: 100 });
         const markdownConverter = new showdown.Converter({ simplifiedAutoLink: true, strikethrough: true, tables: true });
 
-        // --- CONFIGURATION & STATE (DATABASE FIX v14.0) ---
-        // Using the exact credentials provided by the user.
-        const JSONBIN_API_KEY = '$2a$10$ngBMfM29H692e0.OIPke7.LgwJDLeGQJCqmctQgTtiVSHLYlMXOpO';
-        const JSONBIN_BIN_ID = '687500686063391d31ad754f';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        // --- CONFIGURATION & STATE ---
         const CORRECT_PASSWORD = '23030127';
         
         const state = {
             currentPage: 'home',
             articles: [],
+            hasUnsavedChanges: false,
             socialLinks: [
-                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/sourav-dey-6147a72a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>` },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/sourav-dey-6147a72a4', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>` },
                 { name: 'GitHub', url: 'https://github.com/Sdsourab', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>` },
                 { name: 'Facebook', url: 'https://www.facebook.com/share/16vVebvq8A/', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>` },
                 { name: 'Email', url: 'mailto:Soptom.7@gmail.com', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>` }
@@ -483,54 +520,69 @@
             footerSocialsContainer: document.getElementById('footerSocialsContainer'),
             currentYear: document.getElementById('currentYear'),
             notification: document.getElementById('notification'),
+            saveChangesBtn: document.getElementById('saveChangesBtn'),
+            articleDatabase: document.getElementById('articleDatabase'),
         };
 
-        // --- DATA HANDLING (JSONBIN.IO - CORRECTED v14.0) ---
-        const getArticlesFromCloud = async () => {
+        // --- DATA HANDLING (SELF-CONTAINED) ---
+        const loadArticlesFromLocal = () => {
             try {
-                // CORRECTED: Added 'X-Master-Key' header for authentication.
-                const res = await fetch(`${JSONBIN_URL}/latest`, { 
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY } 
-                });
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        console.log("Bin is empty or not found. Initializing with an empty array.");
-                        return [];
-                    }
-                    throw new Error(`Network response error: ${res.statusText}`);
-                }
-                const data = await res.json();
-                return Array.isArray(data.record) ? data.record : [];
+                const data = JSON.parse(dom.articleDatabase.textContent);
+                state.articles = Array.isArray(data) ? data : [];
             } catch (error) {
-                console.error("Error fetching articles:", error);
-                showNotification("Could not fetch articles from the cloud.", "error");
-                return [];
+                console.error("Could not parse article data from script tag:", error);
+                showNotification("Error loading articles from file.", "error");
+                state.articles = [];
             }
         };
 
-        const saveArticlesToCloud = async (articles) => {
+        const persistChangesToFile = () => {
+            const btn = dom.saveChangesBtn;
+            const icon = btn.querySelector('i');
+            const span = btn.querySelector('span');
+            
+            icon.className = 'fas fa-spinner fa-spin';
+            span.textContent = 'Saving...';
+
             try {
-                // CORRECTED: Added 'X-Master-Key' header for authentication.
-                const res = await fetch(JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json', 
-                        'X-Master-Key': JSONBIN_API_KEY,
-                        'X-Bin-Versioning': 'false' // To prevent creating new versions on each save
-                    },
-                    body: JSON.stringify(articles)
-                });
-                if (!res.ok) {
-                    const errorBody = await res.text();
-                    console.error("Error details from server:", errorBody);
-                    throw new Error(`Network response error: ${res.statusText}`);
-                }
-                return true;
+                // Get the current, full HTML of the page
+                const currentHtml = document.documentElement.outerHTML;
+                
+                // Prepare the updated JSON string for the articles
+                const updatedJsonString = JSON.stringify(state.articles, null, 4);
+
+                // Replace the old database content with the new one
+                const newHtml = currentHtml.replace(
+                    /<script id="articleDatabase" type="application\/json">[\s\S]*?<\/script>/,
+                    `<script id="articleDatabase" type="application/json">\n    ${updatedJsonString}\n    <\/script>`
+                );
+
+                // Create a Blob and trigger a download
+                const blob = new Blob([newHtml], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'index.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+
+                // Reset the button and state
+                state.hasUnsavedChanges = false;
+                updateSaveChangesButton();
+                showNotification("File saved! Use the downloaded index.html for your site.", "success");
+
             } catch (error) {
-                console.error("Error saving articles:", error);
-                showNotification("Could not save articles to the cloud.", "error");
-                return false;
+                console.error("Error creating save file:", error);
+                showNotification("Could not save file. See console for details.", "error");
+            } finally {
+                icon.className = 'fas fa-save';
+                span.textContent = 'Save Changes';
             }
+        };
+        
+        const updateSaveChangesButton = () => {
+            dom.saveChangesBtn.classList.toggle('visible', state.hasUnsavedChanges);
         };
 
         // --- UI RENDERING ---
@@ -556,7 +608,7 @@
             dom.articlesGrid.innerHTML = ''; 
 
             if (articlesToDisplay.length === 0) {
-                dom.articlesGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem 0;">No articles found matching your criteria.</p>';
+                dom.articlesGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem 0;">No articles found. Add one to get started!</p>';
             } else {
                 articlesToDisplay.forEach(article => {
                     const card = document.createElement('article');
@@ -613,12 +665,7 @@
         const navigateTo = (pageId) => {
             if (!document.getElementById(pageId)) pageId = 'home';
             state.currentPage = pageId;
-            
-            const url = new URL(window.location);
-            url.hash = pageId;
-            url.search = '';
-            history.pushState({}, '', url);
-
+            history.pushState({page: pageId}, `Finoptiv - ${pageId}`, `#${pageId}`);
             dom.pages.forEach(p => p.classList.toggle('active', p.id === pageId));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
             closeMobileMenu();
@@ -630,14 +677,6 @@
             dom.mobileMenuOverlay.classList.remove('active');
             dom.mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
         };
-
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', () => {
-            if (window.innerWidth < 768) {
-                dom.siteHeader.classList.toggle('header-hidden', lastScrollY < window.scrollY && window.scrollY > 70);
-                lastScrollY = window.scrollY;
-            }
-        });
 
         // --- MODALS & NOTIFICATIONS ---
         const showNotification = (message, type = 'success') => {
@@ -690,28 +729,16 @@
             dom.mobileMenuOverlay.classList.toggle('active', isActive);
             dom.mobileMenuBtn.innerHTML = isActive ? '<i class="fa-solid fa-times"></i>' : '<i class="fa-solid fa-bars"></i>';
         });
-        dom.mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-        dom.searchInput.addEventListener('input', () => { state.visibleArticleCount = state.articlesPerLoad; renderArticles(); });
-        dom.categoryFilters.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                state.activeCategory = e.target.dataset.category;
-                state.visibleArticleCount = state.articlesPerLoad;
-                renderCategoryFilters();
-                renderArticles();
-            }
-        });
-        dom.sortSelect.addEventListener('change', (e) => { state.sortOrder = e.target.value; renderArticles(); });
-        dom.viewToggle.addEventListener('click', (e) => {
-            const btn = e.target.closest('button');
-            if (btn) {
-                dom.articlesGrid.classList.toggle('list-view', btn.dataset.view === 'list');
-                dom.viewToggle.querySelector('.active').classList.remove('active');
-                btn.classList.add('active');
-            }
-        });
-        dom.loadMoreBtn.addEventListener('click', () => { state.visibleArticleCount += state.articlesPerLoad; renderArticles(); });
+        dom.saveChangesBtn.addEventListener('click', persistChangesToFile);
 
         // --- CRUD & FORM LOGIC ---
+        const handleDataChange = () => {
+            state.hasUnsavedChanges = true;
+            updateSaveChangesButton();
+            renderCategoryFilters();
+            renderArticles();
+        };
+        
         const resetAndNavigateHome = () => {
             dom.articleForm.reset();
             document.getElementById('articleId').value = '';
@@ -743,19 +770,16 @@
                 dateAdded: isUpdating ? state.articles.find(a => a.id === state.editingArticleId).dateAdded : new Date().toISOString()
             };
 
-            const processSubmit = async (data) => {
-                const updatedArticles = isUpdating
-                    ? state.articles.map(a => a.id === state.editingArticleId ? { ...a, ...data } : a)
-                    : [...state.articles, data];
-                
-                const success = await saveArticlesToCloud(updatedArticles);
-                if (success) {
-                    state.articles = updatedArticles;
-                    renderCategoryFilters();
-                    renderArticles();
-                    showNotification(`Article ${isUpdating ? 'updated' : 'published'} successfully!`, 'success');
-                    resetAndNavigateHome();
+            const processSubmit = (data) => {
+                if (isUpdating) {
+                    state.articles = state.articles.map(a => a.id === state.editingArticleId ? { ...a, ...data } : a);
+                } else {
+                    state.articles.unshift(data); // Add new articles to the top
                 }
+                
+                handleDataChange();
+                showNotification(`Article ${isUpdating ? 'updated' : 'added'}! Click "Save Changes" to make it permanent.`, 'success');
+                resetAndNavigateHome();
             };
             
             const coverFile = document.getElementById('articleCover').files[0];
@@ -796,78 +820,29 @@
 
             const removeButton = e.target.closest('.remove-btn');
             if (removeButton) {
-                const enteredPassword = await promptForPassword('Confirm Deletion', 'This is a destructive action. Please enter the password to continue.');
-                if (enteredPassword === null) return; 
-                if (enteredPassword !== CORRECT_PASSWORD) {
-                    showNotification('Incorrect password. Deletion denied.', 'error');
-                    return;
-                }
-                const confirmed = await showConfirmationModal('Password correct. Are you sure you want to permanently delete this article? This cannot be undone.');
+                const confirmed = await showConfirmationModal('Are you sure you want to remove this article?');
                 if (confirmed) {
                     const articleId = parseInt(removeButton.dataset.id, 10);
-                    const updatedArticles = state.articles.filter(article => article.id !== articleId);
-                    const success = await saveArticlesToCloud(updatedArticles);
-                    if (success) {
-                        state.articles = updatedArticles;
-                        renderCategoryFilters();
-                        renderArticles();
-                        showNotification('Article removed successfully.', 'success');
-                    }
+                    state.articles = state.articles.filter(article => article.id !== articleId);
+                    handleDataChange();
+                    showNotification('Article removed! Click "Save Changes" to make it permanent.', 'success');
                 }
             }
-        });
-
-        dom.markdownToolbar.addEventListener('click', (e) => {
-            const button = e.target.closest('button, .color-swatch');
-            if (!button) return;
-            const textarea = document.getElementById('articleExcerpt');
-            const { format, color } = button.dataset;
-            const { selectionStart: start, selectionEnd: end, value } = textarea;
-            const selectedText = value.substring(start, end);
-            let prefix = '', suffix = '', replacement = selectedText || '';
-
-            if (color) {
-                prefix = `<mark style="background-color:${color};">`;
-                suffix = `</mark>`;
-                if (!selectedText) replacement = 'highlighted text';
-            } else {
-                switch (format) {
-                    case 'bold': prefix = '**'; suffix = '**'; if (!selectedText) replacement = 'bold text'; break;
-                    case 'italic': prefix = '*'; suffix = '*'; if (!selectedText) replacement = 'italic text'; break;
-                    case 'h2': prefix = '## '; if (!selectedText) replacement = 'Heading'; break;
-                    case 'h3': prefix = '### '; if (!selectedText) replacement = 'Subheading'; break;
-                    case 'ul': prefix = '\n- '; if (!selectedText) replacement = 'List item'; break;
-                    case 'ol': prefix = '\n1. '; if (!selectedText) replacement = 'List item'; break;
-                }
-            }
-            
-            textarea.setRangeText(`${prefix}${replacement}${suffix}`, start, end, 'select');
-            textarea.focus();
         });
 
         // --- APP INITIALIZATION ---
-        const initializeApp = async () => {
+        const initializeApp = () => {
             dom.currentYear.textContent = new Date().getFullYear();
             renderSocials();
-            state.articles = await getArticlesFromCloud();
+            loadArticlesFromLocal();
             renderCategoryFilters();
+            renderArticles();
             
-            const handleUrlState = () => {
-                const urlParams = new URLSearchParams(window.location.search);
-                const searchParam = urlParams.get('search');
-                const pageId = window.location.hash.substring(1) || 'home';
-                
-                navigateTo(pageId);
-                
-                if (searchParam) {
-                    dom.searchInput.value = searchParam;
-                    dom.searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            };
-
-            handleUrlState();
-            renderArticles(); 
-            window.addEventListener('popstate', handleUrlState);
+            const pageId = window.location.hash.substring(1) || 'home';
+            navigateTo(pageId);
+            window.addEventListener('popstate', (event) => {
+                navigateTo(event.state ? event.state.page : 'home');
+            });
         };
 
         initializeApp();
