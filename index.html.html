@@ -4,12 +4,12 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 15.1 (Finalized with Upload Optimization)
+    Version: 16.0 (Finalized with Upload Optimization)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
     Date: July 16, 2025
     Description: This final version optimizes image uploads for a near-instant experience.
                  - Implemented client-side image compression to dramatically reduce upload times.
-                 - Admin actions (add, edit, delete) remain protected by a password (23030127).
+                 - Admin actions (add, edit, delete) are protected by a password (23030127).
                  - Cover images can be uploaded directly from a local computer via Firebase Storage.
     ================================================================================================
     -->
@@ -131,7 +131,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- NEW: Image Compression Library -->
+    <!-- NEW: Image Compression Library for fast uploads -->
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
 
     <style>
@@ -513,7 +513,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app); // Initialize Firebase Storage
+        const storage = getStorage(app);
         const articlesCollection = collection(db, 'articles');
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -826,9 +826,9 @@
                     if (coverFile) {
                         showNotification('Compressing image...', 'success');
                         const options = {
-                            maxSizeMB: 1,
-                            maxWidthOrHeight: 1920,
-                            useWebWorker: true,
+                            maxSizeMB: 1, // Max file size
+                            maxWidthOrHeight: 1920, // Max width/height
+                            useWebWorker: true, // Use a web worker for better performance
                         }
                         const compressedFile = await imageCompression(coverFile, options);
                         showNotification('Uploading compressed image...', 'success');
