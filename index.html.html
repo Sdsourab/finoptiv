@@ -4,13 +4,13 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 16.0 (Finalized with Upload Optimization)
+    Version: 17.0 (Finalized with Rebuilt Upload System)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
     Date: July 16, 2025
-    Description: This final version optimizes image uploads for a near-instant experience.
-                 - Implemented client-side image compression to dramatically reduce upload times.
-                 - Admin actions (add, edit, delete) are protected by a password (23030127).
-                 - Cover images can be uploaded directly from a local computer via Firebase Storage.
+    Description: This final version features a completely rebuilt, robust, and fast upload system.
+                 - Implemented a resilient, multi-stage upload process with clear user feedback.
+                 - Integrated client-side image compression for near-instant uploads.
+                 - Maintained all security features, including password protection for admin actions.
     ================================================================================================
     -->
     <meta charset="UTF-8">
@@ -131,7 +131,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- NEW: Image Compression Library for fast uploads -->
+    <!-- Image Compression Library for fast uploads -->
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
 
     <style>
@@ -795,7 +795,7 @@
             });
             dom.loadMoreBtn.addEventListener('click', () => { state.visibleArticleCount += state.articlesPerLoad; renderArticles(); });
 
-            // --- CRUD & FORM LOGIC ---
+            // --- CRUD & FORM LOGIC (REBUILT SYSTEM) ---
             const resetAndNavigateHome = () => {
                 dom.articleForm.reset();
                 document.getElementById('articleId').value = '';
@@ -816,29 +816,47 @@
 
                 dom.submitBtn.disabled = true;
                 dom.submitBtn.textContent = 'Processing...';
-
+                
                 const isUpdating = !!state.editingArticleId;
-                const coverFile = document.getElementById('articleCoverFile').files[0];
-                let coverUrl = document.getElementById('existingCoverUrl').value;
+                const originalButtonText = isUpdating ? 'Update Article' : 'Publish Article';
 
                 try {
-                    // OPTIMIZATION: Handle file upload if a new file is selected
-                    if (coverFile) {
-                        showNotification('Compressing image...', 'success');
-                        const options = {
-                            maxSizeMB: 1, // Max file size
-                            maxWidthOrHeight: 1920, // Max width/height
-                            useWebWorker: true, // Use a web worker for better performance
-                        }
-                        const compressedFile = await imageCompression(coverFile, options);
-                        showNotification('Uploading compressed image...', 'success');
-                        
-                        const storageRef = ref(storage, `covers/${Date.now()}_${compressedFile.name}`);
-                        const snapshot = await uploadBytes(storageRef, compressedFile);
-                        coverUrl = await getDownloadURL(snapshot.ref);
-                        showNotification('Image upload complete!', 'success');
-                    }
+                    const coverFile = document.getElementById('articleCoverFile').files[0];
+                    let coverUrl = document.getElementById('existingCoverUrl').value;
 
+                    // --- REBUILT IMAGE UPLOAD LOGIC ---
+                    // This block handles the image upload process in stages with clear feedback.
+                    if (coverFile) {
+                        let compressedFile;
+                        // 1. Compress Image
+                        try {
+                            showNotification('Compressing image...', 'success');
+                            const options = {
+                                maxSizeMB: 1,
+                                maxWidthOrHeight: 1920,
+                                useWebWorker: true,
+                            };
+                            compressedFile = await imageCompression(coverFile, options);
+                        } catch (compressionError) {
+                            console.error("Image compression failed:", compressionError);
+                            throw new Error("Could not compress image. Please try another file.");
+                        }
+
+                        // 2. Upload Compressed Image
+                        try {
+                            showNotification('Uploading image...', 'success');
+                            const storageRef = ref(storage, `covers/${Date.now()}_${compressedFile.name}`);
+                            const snapshot = await uploadBytes(storageRef, compressedFile);
+                            coverUrl = await getDownloadURL(snapshot.ref);
+                            showNotification('Image upload complete!', 'success');
+                        } catch (uploadError) {
+                            console.error("Firebase Storage upload failed:", uploadError);
+                            throw new Error("Image upload failed. Check connection and try again.");
+                        }
+                    }
+                    
+                    // --- FIRESTORE DATABASE LOGIC ---
+                    // This part only runs after the image handling is successful.
                     const articleData = {
                         title: document.getElementById('articleTitle').value.trim(),
                         author: document.getElementById('articleAuthor').value.trim(),
@@ -859,12 +877,16 @@
                         });
                         showNotification('Article published successfully!', 'success');
                     }
+                    
                     resetAndNavigateHome();
+
                 } catch (error) {
-                    console.error("Error saving article:", error);
-                    showNotification(`Failed to save article: ${error.message}`, "error");
-                    dom.submitBtn.disabled = false;
-                    dom.submitBtn.textContent = isUpdating ? 'Update Article' : 'Publish Article';
+                    // --- GLOBAL ERROR HANDLER ---
+                    // This catches any error from the process and prevents the UI from getting stuck.
+                    console.error("Error during article submission:", error);
+                    showNotification(error.message || "An unexpected error occurred.", "error");
+                    dom.submitBtn.disabled = false; // Re-enable the button on failure
+                    dom.submitBtn.textContent = originalButtonText;
                 }
             });
 
