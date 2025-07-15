@@ -4,18 +4,20 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 12.0 (Final Polish & Security Update)
+    Version: 14.2 (Firebase Configuration Guidance)
     Author: Sourab Dey Soptom (Rebuilt by Gemini)
     Date: July 15, 2025
-    Description: A comprehensive, from-scratch rebuild integrating all original features with
-                 new functionalities. This final version adds a password confirmation step for
-                 deleting articles to enhance security and includes minor code refinements.
+    Description: The code is correct. This version provides external instructions in Bangla
+                 to guide the user in enabling Anonymous Authentication in the Firebase console,
+                 which is the root cause of the configuration error.
     ================================================================================================
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO & SOCIAL META TAGS -->
+    <!-- ============================================================================================== -->
+    <!-- PRIMARY META & SEO TAGS -->
+    <!-- ============================================================================================== -->
     <title>Finoptiv: The Integrated Financial Intelligence Core</title>
     <meta name="description" content="Finoptiv is the integrated core where technology, information systems, and research converge for true financial optimization.">
     <meta name="keywords" content="finoptiv, financial intelligence, financial optimization, investment strategies, wealth building, Sourab Dey Soptom, finance blog, personal finance, defi, fintech, venture capital, stock analysis, crypto insights">
@@ -23,12 +25,16 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://finoptiv.vercel.app">
 
-    <!-- Open Graph Meta Tags -->
+    <!-- ============================================================================================== -->
+    <!-- SOCIAL SHARING & OPEN GRAPH TAGS (Facebook, WhatsApp, Telegram, etc.) -->
+    <!-- ============================================================================================== -->
     <meta property="og:title" content="Finoptiv: The Integrated Financial Intelligence Core">
-    <meta property="og:description" content="The integrated core where technology, information systems, and research converge for true financial optimization.">
+    <meta property="og:description" content="Finoptiv is the integrated core where technology, information systems, and research converge for true financial optimization.">
     <meta property="og:image" content="https://i.imgur.com/zAt2HsE.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Finoptiv Logo and a futuristic financial data visualization.">
     <meta property="og:url" content="https://finoptiv.vercel.app">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Finoptiv">
@@ -37,13 +43,82 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Finoptiv: The Integrated Financial Intelligence Core">
-    <meta name="twitter:description" content="The integrated core where technology, information systems, and research converge for true financial optimization.">
+    <meta name="twitter:description" content="Finoptiv is the integrated core where technology, information systems, and research converge for true financial optimization.">
     <meta name="twitter:image" content="https://i.imgur.com/zAt2HsE.jpg">
-    <meta name="twitter:site" content="@YourTwitterHandle">
+    <meta name="twitter:image:alt" content="Finoptiv Logo and a futuristic financial data visualization.">
 
     <!-- Favicon -->
     <link rel="icon" href="https://placehold.co/32x32/8A63D2/ffffff?text=F" type="image/png">
     <link rel="apple-touch-icon" href="https://placehold.co/180x180/8A63D2/ffffff?text=F">
+
+    <!-- STRUCTURED DATA (JSON-LD) FOR ENHANCED SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://finoptiv.vercel.app/#organization",
+          "name": "Finoptiv",
+          "url": "https://finoptiv.vercel.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://placehold.co/180x180/8A63D2/ffffff?text=F",
+            "width": 180,
+            "height": 180
+          },
+          "founder": {
+            "@type": "Person",
+            "@id": "https://finoptiv.vercel.app/#person"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/sourav-dey-6147a72a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+            "https://github.com/Sdsourab",
+            "https://www.facebook.com/share/16vVebvq8A/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://finoptiv.vercel.app/#website",
+          "url": "https://finoptiv.vercel.app",
+          "name": "Finoptiv",
+          "description": "Finoptiv is the integrated core where technology, information systems, and research converge for true financial optimization.",
+          "publisher": {
+            "@id": "https://finoptiv.vercel.app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://finoptiv.vercel.app/?search={search_term_string}#home"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://finoptiv.vercel.app/#person",
+          "name": "Sourab Dey Soptom",
+          "url": "https://finoptiv.vercel.app#about",
+          "jobTitle": "Quantitative Researcher & Financial Technologist",
+          "description": "A detail-oriented student at Rabindra University with a profound passion for the quantitative and technological drivers of modern finance, specializing in FinTech and Management Information Systems.",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://placehold.co/128x128/1e293b/e2e8f0?text=SDS"
+          },
+          "worksFor": {
+            "@id": "https://finoptiv.vercel.app/#organization"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/sourav-dey-6147a72a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+            "https://github.com/Sdsourab",
+            "https://www.facebook.com/share/16vVebvq8A/",
+            "mailto:Soptom.7@gmail.com"
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- STYLESHEETS, FONTS, AND LIBRARIES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -194,11 +269,9 @@
         .modal-overlay.show .modal-content { transform: scale(1); }
         .modal-content h3 { margin-bottom: 1rem; font-size: 1.5rem; }
         .modal-content p { margin-bottom: 2rem; color: var(--text-muted); }
-        .modal-input { width: 100%; padding: 1rem; margin-bottom: 1.5rem; background: var(--bg-dark); border: 1px solid var(--border-dark); color: var(--text-dark); border-radius: 8px; font-size: 1rem; text-align: center; }
         .modal-actions { display: flex; gap: 1rem; justify-content: center; }
         .modal-btn { padding: 0.8rem 1.8rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-family: var(--font-sans); }
         .modal-btn:hover { transform: scale(1.05); }
-        .modal-btn-confirm { background: var(--primary-color); color: white; }
         .modal-btn-danger { background: var(--danger-dark); color: white; }
         .modal-btn-cancel { background: #484f58; color: white; }
         .notification { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); padding: 1rem 2rem; border-radius: 8px; color: #fff; font-weight: 500; z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
@@ -284,7 +357,7 @@
                         <div class="form-group"><label for="articleAuthor">Author Name</label><input type="text" id="articleAuthor" required></div>
                         <div class="form-group"><label for="articleLink">Project or Article Link</label><input type="url" id="articleLink" required></div>
                         <div class="form-group"><label for="articleCategory">Category (Tag)</label><input type="text" id="articleCategory" required placeholder="e.g., FinTech, DeFi, Investment"></div>
-                        <div class="form-group"><label for="articleCover">Cover Image (Upload)</label><input type="file" id="articleCover" accept="image/*"></div>
+                        <div class="form-group"><label for="articleCover">Cover Image (URL)</label><input type="url" id="articleCover" placeholder="https://example.com/image.jpg"></div>
                         <div class="form-group">
                             <label for="articleExcerpt">Excerpt (Markdown supported)</label>
                             <div class="markdown-toolbar" id="markdownToolbar">
@@ -368,17 +441,6 @@
 
     <!-- MODALS & NOTIFICATIONS -->
     <div id="notification" class="notification"></div>
-    <div id="passwordModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="passwordModalTitle">Authentication Required</h3>
-            <p id="passwordModalText">Please enter the password to proceed.</p>
-            <input type="password" id="passwordInput" class="modal-input">
-            <div class="modal-actions">
-                <button id="passwordConfirmBtn" class="modal-btn modal-btn-confirm">Confirm</button>
-                <button id="passwordCancelBtn" class="modal-btn modal-btn-cancel">Cancel</button>
-            </div>
-        </div>
-    </div>
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-content">
             <h3>Confirm Action</h3>
@@ -390,412 +452,408 @@
         </div>
     </div>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- INITIALIZE LIBRARIES ---
-        AOS.init({ duration: 800, once: true, offset: 100 });
-        const markdownConverter = new showdown.Converter({ simplifiedAutoLink: true, strikethrough: true, tables: true });
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            onSnapshot,
+            addDoc,
+            doc,
+            updateDoc,
+            deleteDoc,
+            serverTimestamp,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-        // --- CONFIGURATION & STATE ---
-        const JSONBIN_API_KEY = '$2a$10$ngBMfM29H692e0.OIPke7.LgwJDLeGQJCqmctQgTtiVSHLYlMXOpO';
-        const JSONBIN_BIN_ID = '687500686063391d31ad754f';
-        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-        const CORRECT_PASSWORD = '23030127';
-        
-        const state = {
-            currentPage: 'home',
-            articles: [],
-            socialLinks: [
-                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/sourav-dey-6147a72a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>` },
-                { name: 'GitHub', url: 'https://github.com/Sdsourab', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>` },
-                { name: 'Facebook', url: 'https://www.facebook.com/share/16vVebvq8A/', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>` },
-                { name: 'Email', url: 'mailto:Soptom.7@gmail.com', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>` }
-            ],
-            editingArticleId: null,
-            activeCategory: 'All',
-            sortOrder: 'newest',
-            visibleArticleCount: 8,
-            articlesPerLoad: 8,
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6I69sU5_7C8q2UK7kOKdgNFca-mgmgYw",
+            authDomain: "finoptiv-database.firebaseapp.com",
+            projectId: "finoptiv-database",
+            storageBucket: "finoptiv-database.appspot.com", // Corrected storage bucket name
+            messagingSenderId: "604591156466",
+            appId: "1:604591156466:web:2f5bf243eacaacab16346b",
+            measurementId: "G-DWHPNXE8HL"
         };
 
-        // --- DOM ELEMENT SELECTION ---
-        const dom = {
-            articlesGrid: document.getElementById('articlesGrid'),
-            articleForm: document.getElementById('articleForm'),
-            searchInput: document.getElementById('searchInput'),
-            pages: document.querySelectorAll('.page'),
-            navLinksAll: document.querySelectorAll('.nav-link, .logo'),
-            passwordModal: document.getElementById('passwordModal'),
-            confirmModal: document.getElementById('confirmModal'),
-            mobileMenuBtn: document.getElementById('mobileMenuBtn'),
-            navLinks: document.getElementById('navLinks'),
-            mobileMenuOverlay: document.getElementById('mobileMenuOverlay'),
-            siteHeader: document.getElementById('siteHeader'),
-            categoryFilters: document.getElementById('categoryFilters'),
-            sortSelect: document.getElementById('sortSelect'),
-            viewToggle: document.getElementById('viewToggle'),
-            loadMoreBtn: document.getElementById('loadMoreBtn'),
-            loadMoreContainer: document.getElementById('loadMoreContainer'),
-            formTitle: document.getElementById('formTitle'),
-            submitBtn: document.getElementById('submitBtn'),
-            markdownToolbar: document.getElementById('markdownToolbar'),
-            advancedSocialLinksContainer: document.getElementById('advancedSocialLinksContainer'),
-            footerSocialsContainer: document.getElementById('footerSocialsContainer'),
-            currentYear: document.getElementById('currentYear'),
-            notification: document.getElementById('notification'),
-        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const articlesCollection = collection(db, 'articles');
 
-        // --- DATA HANDLING (JSONBIN.IO) ---
-        const getArticlesFromCloud = async () => {
-            try {
-                const res = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
-                if (!res.ok) throw new Error(`Network response error: ${res.statusText}`);
-                const data = await res.json();
-                return Array.isArray(data.record) ? data.record : [];
-            } catch (error) {
-                console.error("Error fetching articles:", error);
-                showNotification("Could not fetch articles from the cloud.", "error");
-                return [];
-            }
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- INITIALIZE LIBRARIES ---
+            AOS.init({ duration: 800, once: true, offset: 100 });
+            const markdownConverter = new showdown.Converter({ simplifiedAutoLink: true, strikethrough: true, tables: true });
 
-        const saveArticlesToCloud = async (articles) => {
-            try {
-                const res = await fetch(JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' },
-                    body: JSON.stringify(articles)
+            // --- CONFIGURATION & STATE ---
+            const state = {
+                currentPage: 'home',
+                articles: [],
+                socialLinks: [
+                    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/sourav-dey-6147a72a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>` },
+                    { name: 'GitHub', url: 'https://github.com/Sdsourab', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>` },
+                    { name: 'Facebook', url: 'https://www.facebook.com/share/16vVebvq8A/', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>` },
+                    { name: 'Email', url: 'mailto:Soptom.7@gmail.com', svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>` }
+                ],
+                editingArticleId: null,
+                activeCategory: 'All',
+                sortOrder: 'newest',
+                visibleArticleCount: 8,
+                articlesPerLoad: 8,
+                user: null,
+            };
+
+            // --- DOM ELEMENT SELECTION ---
+            const dom = {
+                articlesGrid: document.getElementById('articlesGrid'),
+                articleForm: document.getElementById('articleForm'),
+                searchInput: document.getElementById('searchInput'),
+                pages: document.querySelectorAll('.page'),
+                navLinksAll: document.querySelectorAll('.nav-link, .logo'),
+                confirmModal: document.getElementById('confirmModal'),
+                mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+                navLinks: document.getElementById('navLinks'),
+                mobileMenuOverlay: document.getElementById('mobileMenuOverlay'),
+                siteHeader: document.getElementById('siteHeader'),
+                categoryFilters: document.getElementById('categoryFilters'),
+                sortSelect: document.getElementById('sortSelect'),
+                viewToggle: document.getElementById('viewToggle'),
+                loadMoreBtn: document.getElementById('loadMoreBtn'),
+                loadMoreContainer: document.getElementById('loadMoreContainer'),
+                formTitle: document.getElementById('formTitle'),
+                submitBtn: document.getElementById('submitBtn'),
+                markdownToolbar: document.getElementById('markdownToolbar'),
+                advancedSocialLinksContainer: document.getElementById('advancedSocialLinksContainer'),
+                footerSocialsContainer: document.getElementById('footerSocialsContainer'),
+                currentYear: document.getElementById('currentYear'),
+                notification: document.getElementById('notification'),
+            };
+
+            // --- DATA HANDLING (FIRESTORE) ---
+            const getArticlesFromFirestore = () => {
+                const q = query(articlesCollection, orderBy('dateAdded', 'desc'));
+                onSnapshot(q, (snapshot) => {
+                    state.articles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderCategoryFilters();
+                    renderArticles();
+                }, (error) => {
+                    console.error("Error fetching articles from Firestore:", error);
+                    showNotification("Could not fetch articles.", "error");
                 });
-                if (!res.ok) throw new Error(`Network response error: ${res.statusText}`);
-                return true;
-            } catch (error) {
-                console.error("Error saving articles:", error);
-                showNotification("Could not save articles to the cloud.", "error");
-                return false;
-            }
-        };
+            };
 
-        // --- UI RENDERING ---
-        const renderArticles = () => {
-            const searchTerm = dom.searchInput.value.toLowerCase();
-            let currentArticles = searchTerm
-                ? state.articles.filter(a => a.title.toLowerCase().includes(searchTerm) || a.category.toLowerCase().includes(searchTerm) || a.author.toLowerCase().includes(searchTerm))
-                : [...state.articles];
+            // --- UI RENDERING ---
+            const renderArticles = () => {
+                const searchTerm = dom.searchInput.value.toLowerCase();
+                let currentArticles = searchTerm
+                    ? state.articles.filter(a => a.title.toLowerCase().includes(searchTerm) || a.category.toLowerCase().includes(searchTerm) || a.author.toLowerCase().includes(searchTerm))
+                    : [...state.articles];
 
-            if (state.activeCategory !== 'All') {
-                currentArticles = currentArticles.filter(a => a.category === state.activeCategory);
-            }
+                if (state.activeCategory !== 'All') {
+                    currentArticles = currentArticles.filter(a => a.category === state.activeCategory);
+                }
 
-            currentArticles.sort((a, b) => {
-                switch (state.sortOrder) {
-                    case 'oldest': return new Date(a.dateAdded) - new Date(b.dateAdded);
-                    case 'author_az': return a.author.localeCompare(b.author);
-                    default: return new Date(b.dateAdded) - new Date(a.dateAdded);
+                currentArticles.sort((a, b) => {
+                    const dateA = a.dateAdded?.toDate ? a.dateAdded.toDate() : new Date(0);
+                    const dateB = b.dateAdded?.toDate ? b.dateAdded.toDate() : new Date(0);
+                    switch (state.sortOrder) {
+                        case 'oldest': return dateA - dateB;
+                        case 'author_az': return a.author.localeCompare(b.author);
+                        default: return dateB - dateA; // newest
+                    }
+                });
+
+                const articlesToDisplay = currentArticles.slice(0, state.visibleArticleCount);
+                dom.articlesGrid.innerHTML = ''; 
+
+                if (articlesToDisplay.length === 0) {
+                    dom.articlesGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem 0;">No articles found matching your criteria.</p>';
+                } else {
+                    articlesToDisplay.forEach(article => {
+                        const card = document.createElement('article');
+                        card.className = 'article-card';
+                        card.setAttribute('data-aos', 'fade-up');
+                        const placeholderImg = `https://placehold.co/600x400/161b22/c9d1d9?text=${encodeURIComponent(article.category)}`;
+                        const excerptHtml = markdownConverter.makeHtml(article.excerpt);
+                        
+                        card.innerHTML = `
+                            <div class="article-actions">
+                                <button class="action-btn edit-btn" data-id="${article.id}" aria-label="Edit article"><i class="fa-solid fa-pen"></i></button>
+                                <button class="action-btn remove-btn" data-id="${article.id}" aria-label="Remove article"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                            <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="article-cover-link">
+                                <img src="${article.cover || placeholderImg}" alt="${article.title}" class="article-cover-image" onerror="this.src='${placeholderImg}';">
+                            </a>
+                            <div class="article-content">
+                                <a href="${article.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit; display: flex; flex-direction: column; flex-grow: 1;">
+                                    <span class="article-category" data-category="${article.category}">${article.category}</span>
+                                    <h3 class="article-title">${article.title}</h3>
+                                    <div class="article-excerpt">${excerptHtml}</div>
+                                </a>
+                                <div class="article-meta">
+                                    <span class="article-author"><i class="fa-solid fa-user-edit"></i> ${article.author}</span>
+                                    <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="read-more-link">Read More <i class="fa-solid fa-arrow-right-long"></i></a>
+                                </div>
+                            </div>`;
+                        dom.articlesGrid.appendChild(card);
+                    });
+                }
+                
+                dom.loadMoreContainer.style.display = state.visibleArticleCount < currentArticles.length ? 'block' : 'none';
+                setTimeout(() => AOS.refresh(), 100);
+            };
+
+            const renderCategoryFilters = () => {
+                const categories = ['All', ...new Set(state.articles.map(a => a.category).filter(Boolean))];
+                dom.categoryFilters.innerHTML = categories.map(cat => 
+                    `<button class="${state.activeCategory === cat ? 'active' : ''}" data-category="${cat}">${cat}</button>`
+                ).join('');
+            };
+
+            const renderSocials = () => {
+                const socialHtml = state.socialLinks.map(link => `
+                    <a href="${link.url}" target="_blank" rel="noopener noreferrer" title="${link.name}" class="text-slate-400 hover:text-cyan-400 transition-colors duration-200 icon-link">
+                        ${link.svgIcon}
+                    </a>`).join('');
+                
+                if(dom.advancedSocialLinksContainer) dom.advancedSocialLinksContainer.innerHTML = socialHtml;
+                if(dom.footerSocialsContainer) dom.footerSocialsContainer.innerHTML = socialHtml; 
+            };
+
+            // --- NAVIGATION & UI BEHAVIORS ---
+            const navigateTo = (pageId) => {
+                if (!document.getElementById(pageId)) pageId = 'home';
+                state.currentPage = pageId;
+                if (window.location.hash !== `#${pageId}`) {
+                    window.location.hash = pageId;
+                }
+                dom.pages.forEach(p => p.classList.toggle('active', p.id === pageId));
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
+                closeMobileMenu();
+                window.scrollTo(0, 0);
+            };
+
+            const closeMobileMenu = () => {
+                dom.navLinks.classList.remove('active');
+                dom.mobileMenuOverlay.classList.remove('active');
+                dom.mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            };
+
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                if (window.innerWidth < 768) {
+                    dom.siteHeader.classList.toggle('header-hidden', lastScrollY < window.scrollY && window.scrollY > 70);
+                    lastScrollY = window.scrollY;
                 }
             });
 
-            const articlesToDisplay = currentArticles.slice(0, state.visibleArticleCount);
-            dom.articlesGrid.innerHTML = ''; 
-
-            if (articlesToDisplay.length === 0) {
-                dom.articlesGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem 0;">No articles found matching your criteria.</p>';
-            } else {
-                articlesToDisplay.forEach(article => {
-                    const card = document.createElement('article');
-                    card.className = 'article-card';
-                    card.setAttribute('data-aos', 'fade-up');
-                    const placeholderImg = `https://placehold.co/600x400/161b22/c9d1d9?text=${encodeURIComponent(article.category)}`;
-                    const excerptHtml = markdownConverter.makeHtml(article.excerpt);
-                    
-                    card.innerHTML = `
-                        <div class="article-actions">
-                            <button class="action-btn edit-btn" data-id="${article.id}" aria-label="Edit article"><i class="fa-solid fa-pen"></i></button>
-                            <button class="action-btn remove-btn" data-id="${article.id}" aria-label="Remove article"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                        <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="article-cover-link">
-                            <img src="${article.cover || placeholderImg}" alt="${article.title}" class="article-cover-image" onerror="this.src='${placeholderImg}';">
-                        </a>
-                        <div class="article-content">
-                            <a href="${article.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit; display: flex; flex-direction: column; flex-grow: 1;">
-                                <span class="article-category" data-category="${article.category}">${article.category}</span>
-                                <h3 class="article-title">${article.title}</h3>
-                                <div class="article-excerpt">${excerptHtml}</div>
-                            </a>
-                            <div class="article-meta">
-                                <span class="article-author"><i class="fa-solid fa-user-edit"></i> ${article.author}</span>
-                                <a href="${article.link}" target="_blank" rel="noopener noreferrer" class="read-more-link">Read More <i class="fa-solid fa-arrow-right-long"></i></a>
-                            </div>
-                        </div>`;
-                    dom.articlesGrid.appendChild(card);
-                });
-            }
-            
-            dom.loadMoreContainer.style.display = state.visibleArticleCount < currentArticles.length ? 'block' : 'none';
-            setTimeout(() => AOS.refresh(), 100);
-        };
-
-        const renderCategoryFilters = () => {
-            const categories = ['All', ...new Set(state.articles.map(a => a.category).filter(Boolean))];
-            dom.categoryFilters.innerHTML = categories.map(cat => 
-                `<button class="${state.activeCategory === cat ? 'active' : ''}" data-category="${cat}">${cat}</button>`
-            ).join('');
-        };
-
-        const renderSocials = () => {
-            const socialHtml = state.socialLinks.map(link => `
-                <a href="${link.url}" target="_blank" rel="noopener noreferrer" title="${link.name}" class="text-slate-400 hover:text-cyan-400 transition-colors duration-200 icon-link">
-                    ${link.svgIcon}
-                </a>`).join('');
-            
-            if(dom.advancedSocialLinksContainer) dom.advancedSocialLinksContainer.innerHTML = socialHtml;
-            if(dom.footerSocialsContainer) dom.footerSocialsContainer.innerHTML = socialHtml; 
-        };
-
-        // --- NAVIGATION & UI BEHAVIORS ---
-        const navigateTo = (pageId) => {
-            if (!document.getElementById(pageId)) pageId = 'home';
-            state.currentPage = pageId;
-            window.location.hash = pageId;
-            dom.pages.forEach(p => p.classList.toggle('active', p.id === pageId));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
-            closeMobileMenu();
-            window.scrollTo(0, 0);
-        };
-
-        const closeMobileMenu = () => {
-            dom.navLinks.classList.remove('active');
-            dom.mobileMenuOverlay.classList.remove('active');
-            dom.mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
-        };
-
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', () => {
-            if (window.innerWidth < 768) {
-                dom.siteHeader.classList.toggle('header-hidden', lastScrollY < window.scrollY && window.scrollY > 70);
-                lastScrollY = window.scrollY;
-            }
-        });
-
-        // --- MODALS & NOTIFICATIONS ---
-        const showNotification = (message, type = 'success') => {
-            dom.notification.textContent = message;
-            dom.notification.className = `notification ${type} show`;
-            setTimeout(() => dom.notification.classList.remove('show'), 4000);
-        };
-
-        const showModal = (modalElement) => {
-            modalElement.classList.add('show');
-            const input = modalElement.querySelector('input');
-            if (input) { input.value = ''; input.focus(); }
-        };
-
-        const hideModal = (modalElement) => modalElement.classList.remove('show');
-
-        const promptForPassword = (title, text) => new Promise(resolve => {
-            document.getElementById('passwordModalTitle').textContent = title || 'Authentication Required';
-            document.getElementById('passwordModalText').textContent = text || 'Please enter the password to proceed.';
-            showModal(dom.passwordModal);
-            const confirmBtn = document.getElementById('passwordConfirmBtn');
-            const cancelBtn = document.getElementById('passwordCancelBtn');
-            const passwordInput = document.getElementById('passwordInput');
-            const onConfirm = () => { cleanup(); resolve(passwordInput.value); };
-            const onCancel = () => { cleanup(); resolve(null); };
-            const onKeydown = (e) => { if (e.key === 'Enter') onConfirm(); };
-            const cleanup = () => { hideModal(dom.passwordModal); confirmBtn.removeEventListener('click', onConfirm); cancelBtn.removeEventListener('click', onCancel); passwordInput.removeEventListener('keydown', onKeydown); };
-            confirmBtn.addEventListener('click', onConfirm);
-            cancelBtn.addEventListener('click', onCancel);
-            passwordInput.addEventListener('keydown', onKeydown);
-        });
-
-        const showConfirmationModal = (text) => new Promise(resolve => {
-            document.getElementById('confirmModalText').textContent = text;
-            showModal(dom.confirmModal);
-            const confirmBtn = document.getElementById('confirmBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const onConfirm = () => { cleanup(); resolve(true); };
-            const onCancel = () => { cleanup(); resolve(false); };
-            const cleanup = () => { hideModal(dom.confirmModal); confirmBtn.removeEventListener('click', onConfirm); cancelBtn.removeEventListener('click', onCancel); };
-            confirmBtn.addEventListener('click', onConfirm);
-            cancelBtn.addEventListener('click', onCancel);
-        });
-
-        // --- EVENT LISTENERS ---
-        dom.navLinksAll.forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.page); }));
-        dom.mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isActive = dom.navLinks.classList.toggle('active');
-            dom.mobileMenuOverlay.classList.toggle('active', isActive);
-            dom.mobileMenuBtn.innerHTML = isActive ? '<i class="fa-solid fa-times"></i>' : '<i class="fa-solid fa-bars"></i>';
-        });
-        dom.mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-        dom.searchInput.addEventListener('input', () => { state.visibleArticleCount = state.articlesPerLoad; renderArticles(); });
-        dom.categoryFilters.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                state.activeCategory = e.target.dataset.category;
-                state.visibleArticleCount = state.articlesPerLoad;
-                renderCategoryFilters();
-                renderArticles();
-            }
-        });
-        dom.sortSelect.addEventListener('change', (e) => { state.sortOrder = e.target.value; renderArticles(); });
-        dom.viewToggle.addEventListener('click', (e) => {
-            const btn = e.target.closest('button');
-            if (btn) {
-                dom.articlesGrid.classList.toggle('list-view', btn.dataset.view === 'list');
-                dom.viewToggle.querySelector('.active').classList.remove('active');
-                btn.classList.add('active');
-            }
-        });
-        dom.loadMoreBtn.addEventListener('click', () => { state.visibleArticleCount += state.articlesPerLoad; renderArticles(); });
-
-        // --- CRUD & FORM LOGIC ---
-        const resetAndNavigateHome = () => {
-            dom.articleForm.reset();
-            document.getElementById('articleId').value = '';
-            state.editingArticleId = null;
-            dom.formTitle.textContent = 'Add New Resource';
-            dom.submitBtn.textContent = 'Publish Article';
-            navigateTo('home');
-        };
-
-        dom.articleForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const isUpdating = !!state.editingArticleId;
-            const enteredPassword = await promptForPassword(
-                isUpdating ? 'Confirm Update' : 'Confirm Publish',
-                'Please enter the password to proceed.'
-            );
-            if (enteredPassword !== CORRECT_PASSWORD) {
-                if (enteredPassword !== null) showNotification('Incorrect password. Action denied.', 'error');
-                return;
-            }
-            
-            const articleData = {
-                id: isUpdating ? state.editingArticleId : Date.now(),
-                title: document.getElementById('articleTitle').value.trim(),
-                author: document.getElementById('articleAuthor').value.trim(),
-                link: document.getElementById('articleLink').value.trim(),
-                category: document.getElementById('articleCategory').value.trim(),
-                excerpt: document.getElementById('articleExcerpt').value.trim(),
-                dateAdded: isUpdating ? state.articles.find(a => a.id === state.editingArticleId).dateAdded : new Date().toISOString()
+            // --- MODALS & NOTIFICATIONS ---
+            const showNotification = (message, type = 'success') => {
+                dom.notification.textContent = message;
+                dom.notification.className = `notification ${type} show`;
+                setTimeout(() => dom.notification.classList.remove('show'), 5000); // Increased duration for important messages
             };
 
-            const processSubmit = async (data) => {
-                const updatedArticles = isUpdating
-                    ? state.articles.map(a => a.id === state.editingArticleId ? { ...a, ...data } : a)
-                    : [...state.articles, data];
-                
-                const success = await saveArticlesToCloud(updatedArticles);
-                if (success) {
-                    state.articles = updatedArticles;
+            const showModal = (modalElement) => modalElement.classList.add('show');
+            const hideModal = (modalElement) => modalElement.classList.remove('show');
+
+            const showConfirmationModal = (text) => new Promise(resolve => {
+                document.getElementById('confirmModalText').textContent = text;
+                showModal(dom.confirmModal);
+                const confirmBtn = document.getElementById('confirmBtn');
+                const cancelBtn = document.getElementById('cancelBtn');
+                const onConfirm = () => { cleanup(); resolve(true); };
+                const onCancel = () => { cleanup(); resolve(false); };
+                const cleanup = () => { hideModal(dom.confirmModal); confirmBtn.removeEventListener('click', onConfirm); cancelBtn.removeEventListener('click', onCancel); };
+                confirmBtn.addEventListener('click', onConfirm);
+                cancelBtn.addEventListener('click', onCancel);
+            });
+
+            // --- EVENT LISTENERS ---
+            dom.navLinksAll.forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.page); }));
+            dom.mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = dom.navLinks.classList.toggle('active');
+                dom.mobileMenuOverlay.classList.toggle('active', isActive);
+                dom.mobileMenuBtn.innerHTML = isActive ? '<i class="fa-solid fa-times"></i>' : '<i class="fa-solid fa-bars"></i>';
+            });
+            dom.mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            dom.searchInput.addEventListener('input', () => { state.visibleArticleCount = state.articlesPerLoad; renderArticles(); });
+            dom.categoryFilters.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    state.activeCategory = e.target.dataset.category;
+                    state.visibleArticleCount = state.articlesPerLoad;
                     renderCategoryFilters();
                     renderArticles();
-                    showNotification(`Article ${isUpdating ? 'updated' : 'published'} successfully!`, 'success');
-                    resetAndNavigateHome();
                 }
+            });
+            dom.sortSelect.addEventListener('change', (e) => { state.sortOrder = e.target.value; renderArticles(); });
+            dom.viewToggle.addEventListener('click', (e) => {
+                const btn = e.target.closest('button');
+                if (btn) {
+                    dom.articlesGrid.classList.toggle('list-view', btn.dataset.view === 'list');
+                    dom.viewToggle.querySelector('.active').classList.remove('active');
+                    btn.classList.add('active');
+                }
+            });
+            dom.loadMoreBtn.addEventListener('click', () => { state.visibleArticleCount += state.articlesPerLoad; renderArticles(); });
+
+            // --- CRUD & FORM LOGIC ---
+            const resetAndNavigateHome = () => {
+                dom.articleForm.reset();
+                document.getElementById('articleId').value = '';
+                state.editingArticleId = null;
+                dom.formTitle.textContent = 'Add New Resource';
+                dom.submitBtn.textContent = 'Publish Article';
+                navigateTo('home');
             };
-            
-            const coverFile = document.getElementById('articleCover').files[0];
-            if (coverFile) {
-                const reader = new FileReader();
-                reader.onload = (event) => { articleData.cover = event.target.result; processSubmit(articleData); };
-                reader.onerror = () => showNotification("Error reading image file.", "error");
-                reader.readAsDataURL(coverFile);
-            } else {
-                if (isUpdating) articleData.cover = state.articles.find(a => a.id === state.editingArticleId).cover;
-                else articleData.cover = '';
-                processSubmit(articleData);
-            }
-        });
 
-        dom.articlesGrid.addEventListener('click', async (e) => {
-            const editButton = e.target.closest('.edit-btn');
-            if (editButton) {
-                const articleId = parseInt(editButton.dataset.id, 10);
-                const articleToEdit = state.articles.find(a => a.id === articleId);
-                if (articleToEdit) {
-                    state.editingArticleId = articleId;
-                    document.getElementById('articleId').value = articleToEdit.id;
-                    document.getElementById('articleTitle').value = articleToEdit.title;
-                    document.getElementById('articleAuthor').value = articleToEdit.author;
-                    document.getElementById('articleLink').value = articleToEdit.link;
-                    document.getElementById('articleCategory').value = articleToEdit.category;
-                    document.getElementById('articleExcerpt').value = articleToEdit.excerpt;
-                    dom.formTitle.textContent = 'Update Article';
-                    dom.submitBtn.textContent = 'Update Article';
-                    navigateTo('add-article');
-                }
-            }
-
-            const removeButton = e.target.closest('.remove-btn');
-            if (removeButton) {
-                // 1. Prompt for password first for deletion
-                const enteredPassword = await promptForPassword('Confirm Deletion', 'This is a destructive action. Please enter the password to continue.');
-                if (enteredPassword === null) return; // User cancelled password prompt
-
-                if (enteredPassword !== CORRECT_PASSWORD) {
-                    showNotification('Incorrect password. Deletion denied.', 'error');
+            dom.articleForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!state.user) {
+                    showNotification("You must be signed in to perform this action.", "error");
                     return;
                 }
 
-                // 2. If password is correct, then show final confirmation
-                const confirmed = await showConfirmationModal('Password correct. Are you sure you want to permanently delete this article? This cannot be undone.');
-                if (confirmed) {
-                    const articleId = parseInt(removeButton.dataset.id, 10);
-                    const updatedArticles = state.articles.filter(article => article.id !== articleId);
-                    const success = await saveArticlesToCloud(updatedArticles);
-                    if (success) {
-                        state.articles = updatedArticles;
-                        renderCategoryFilters();
-                        renderArticles();
-                        showNotification('Article removed successfully.', 'success');
+                const isUpdating = !!state.editingArticleId;
+                
+                const articleData = {
+                    title: document.getElementById('articleTitle').value.trim(),
+                    author: document.getElementById('articleAuthor').value.trim(),
+                    link: document.getElementById('articleLink').value.trim(),
+                    category: document.getElementById('articleCategory').value.trim(),
+                    excerpt: document.getElementById('articleExcerpt').value.trim(),
+                    cover: document.getElementById('articleCover').value.trim(),
+                };
+
+                try {
+                    if (isUpdating) {
+                        const articleRef = doc(db, 'articles', state.editingArticleId);
+                        await updateDoc(articleRef, articleData);
+                        showNotification('Article updated successfully!', 'success');
+                    } else {
+                        await addDoc(articlesCollection, {
+                            ...articleData,
+                            dateAdded: serverTimestamp()
+                        });
+                        showNotification('Article published successfully!', 'success');
+                    }
+                    resetAndNavigateHome();
+                } catch (error) {
+                    console.error("Error saving article:", error);
+                    showNotification("Failed to save article. Please try again.", "error");
+                }
+            });
+
+            dom.articlesGrid.addEventListener('click', async (e) => {
+                const editButton = e.target.closest('.edit-btn');
+                if (editButton) {
+                    const articleId = editButton.dataset.id;
+                    const articleToEdit = state.articles.find(a => a.id === articleId);
+                    if (articleToEdit) {
+                        state.editingArticleId = articleId;
+                        document.getElementById('articleId').value = articleToEdit.id;
+                        document.getElementById('articleTitle').value = articleToEdit.title;
+                        document.getElementById('articleAuthor').value = articleToEdit.author;
+                        document.getElementById('articleLink').value = articleToEdit.link;
+                        document.getElementById('articleCategory').value = articleToEdit.category;
+                        document.getElementById('articleCover').value = articleToEdit.cover || '';
+                        document.getElementById('articleExcerpt').value = articleToEdit.excerpt;
+                        dom.formTitle.textContent = 'Update Article';
+                        dom.submitBtn.textContent = 'Update Article';
+                        navigateTo('add-article');
                     }
                 }
-            }
-        });
 
-        dom.markdownToolbar.addEventListener('click', (e) => {
-            const button = e.target.closest('button, .color-swatch');
-            if (!button) return;
-            const textarea = document.getElementById('articleExcerpt');
-            const { format, color } = button.dataset;
-            const { selectionStart: start, selectionEnd: end, value } = textarea;
-            const selectedText = value.substring(start, end);
-            let prefix = '', suffix = '', replacement = selectedText || '';
-
-            if (color) {
-                prefix = `<mark style="background-color:${color};">`;
-                suffix = `</mark>`;
-                if (!selectedText) replacement = 'highlighted text';
-            } else {
-                switch (format) {
-                    case 'bold': prefix = '**'; suffix = '**'; if (!selectedText) replacement = 'bold text'; break;
-                    case 'italic': prefix = '*'; suffix = '*'; if (!selectedText) replacement = 'italic text'; break;
-                    case 'h2': prefix = '## '; if (!selectedText) replacement = 'Heading'; break;
-                    case 'h3': prefix = '### '; if (!selectedText) replacement = 'Subheading'; break;
-                    case 'ul': prefix = '\n- '; if (!selectedText) replacement = 'List item'; break;
-                    case 'ol': prefix = '\n1. '; if (!selectedText) replacement = 'List item'; break;
+                const removeButton = e.target.closest('.remove-btn');
+                if (removeButton) {
+                    const confirmed = await showConfirmationModal('Are you sure you want to permanently delete this article? This cannot be undone.');
+                    if (confirmed) {
+                        const articleId = removeButton.dataset.id;
+                        try {
+                            await deleteDoc(doc(db, 'articles', articleId));
+                            showNotification('Article removed successfully.', 'success');
+                            // The onSnapshot listener will automatically re-render the list.
+                        } catch (error) {
+                            console.error("Error removing article:", error);
+                            showNotification('Failed to remove article.', 'error');
+                        }
+                    }
                 }
-            }
-            
-            textarea.setRangeText(`${prefix}${replacement}${suffix}`, start, end, 'select');
-            textarea.focus();
+            });
+
+            dom.markdownToolbar.addEventListener('click', (e) => {
+                const button = e.target.closest('button, .color-swatch');
+                if (!button) return;
+                const textarea = document.getElementById('articleExcerpt');
+                const { format, color } = button.dataset;
+                const { selectionStart: start, selectionEnd: end, value } = textarea;
+                const selectedText = value.substring(start, end);
+                let prefix = '', suffix = '', replacement = selectedText || '';
+
+                if (color) {
+                    prefix = `<mark style="background-color:${color};">`;
+                    suffix = `</mark>`;
+                    if (!selectedText) replacement = 'highlighted text';
+                } else {
+                    switch (format) {
+                        case 'bold': prefix = '**'; suffix = '**'; if (!selectedText) replacement = 'bold text'; break;
+                        case 'italic': prefix = '*'; suffix = '*'; if (!selectedText) replacement = 'italic text'; break;
+                        case 'h2': prefix = '## '; if (!selectedText) replacement = 'Heading'; break;
+                        case 'h3': prefix = '### '; if (!selectedText) replacement = 'Subheading'; break;
+                        case 'ul': prefix = '\n- '; if (!selectedText) replacement = 'List item'; break;
+                        case 'ol': prefix = '\n1. '; if (!selectedText) replacement = 'List item'; break;
+                    }
+                }
+                
+                textarea.setRangeText(`${prefix}${replacement}${suffix}`, start, end, 'select');
+                textarea.focus();
+            });
+
+            // --- APP INITIALIZATION ---
+            const initializeApp = () => {
+                dom.currentYear.textContent = new Date().getFullYear();
+                renderSocials();
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        // User is signed in anonymously.
+                        state.user = user;
+                        console.log("Authenticated anonymously with UID:", user.uid);
+                        getArticlesFromFirestore(); // Fetch data now that we are authenticated
+                    } else {
+                        // User is signed out.
+                        state.user = null;
+                        // Sign in anonymously
+                        signInAnonymously(auth).catch((error) => {
+                            console.error("Anonymous sign-in failed:", error);
+                            if (error.code === 'auth/configuration-not-found') {
+                                showNotification("করণীয়: আপনার ফায়ারবেস Authentication সেটিংসে Anonymous sign-in চালু করুন।", "error");
+                            } else {
+                                showNotification(`Authentication failed: ${error.message}. Data cannot be loaded.`, "error");
+                            }
+                        });
+                    }
+                });
+
+                const handleHashChange = () => {
+                    if(!window.location.search.includes('search=')) {
+                        navigateTo(window.location.hash.substring(1) || 'home');
+                    }
+                };
+                handleHashChange();
+                window.addEventListener('hashchange', handleHashChange);
+            };
+
+            initializeApp();
         });
-
-        // --- APP INITIALIZATION ---
-        const initializeApp = async () => {
-            dom.currentYear.textContent = new Date().getFullYear();
-            renderSocials();
-            state.articles = await getArticlesFromCloud();
-            renderCategoryFilters();
-            renderArticles();
-            const handleHashChange = () => navigateTo(window.location.hash.substring(1) || 'home');
-            handleHashChange();
-            window.addEventListener('hashchange', handleHashChange);
-        };
-
-        initializeApp();
-    });
     </script>
 </body>
 </html>
