@@ -4,13 +4,12 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 21.0 (Feature Update: Tag Analytics)
+    Version: 21.1 (Feature Update: Smart Date/Time)
     Author: Sourab Dey Soptom
     Date: July 16, 2025
-    Description: This version introduces a dynamic tag analytics feature. Category filters now
-                 display the percentage of articles belonging to each tag, with visual indicators
-                 for high-traffic (green) and low-traffic (red) tags. This provides at-a-glance
-                 insight into content distribution.
+    Description: This version introduces smart date and time handling. Articles now display their
+                 publication date and time. The admin form includes a modern date-time picker
+                 for scheduling posts, enhancing content management.
     ================================================================================================
     -->
     <meta charset="UTF-8">
@@ -270,8 +269,10 @@
         .article-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-dark); }
         .article-cover-image { width: 100%; height: 200px; object-fit: cover; background-color: #333; border-bottom: 1px solid var(--border-dark); transition: all 0.4s ease; }
         .article-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .article-category { align-self: flex-start; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; background: var(--gradient-accent); color: white; cursor: pointer; transition: transform 0.2s; }
+        .article-top-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; }
+        .article-category { flex-shrink: 0; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--gradient-accent); color: white; cursor: pointer; transition: transform 0.2s; }
         .article-category:hover { transform: scale(1.05); }
+        .article-publish-date { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-secondary); text-align: right; white-space: nowrap; }
         .article-title { font-family: var(--font-secondary); font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.4; color: var(--text-dark); }
         .article-excerpt { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-grow: 1; }
         .article-excerpt p, .article-excerpt ul, .article-excerpt ol { margin-bottom: 0.5rem; }
@@ -304,6 +305,9 @@
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; border-radius: 8px; font-family: inherit; font-size: 1rem; background-color: var(--bg-dark); border: 1px solid var(--border-dark); color: var(--text-dark); transition: all 0.3s ease; }
         .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(138, 99, 210, 0.3); }
         .form-group textarea { min-height: 200px; resize: vertical; font-family: var(--font-secondary); }
+        .form-group input[type="datetime-local"] { color-scheme: dark; }
+        .form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; transition: opacity 0.2s; filter: invert(0.6); }
+        .form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
         .markdown-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; padding: 0.5rem; background-color: var(--bg-dark); border-radius: 8px; border: 1px solid var(--border-dark); }
         .markdown-toolbar button { background: none; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 5px; font-size: 0.9rem; transition: all 0.2s; }
         .markdown-toolbar button:hover { background-color: var(--border-dark); color: var(--text-dark); }
@@ -429,6 +433,11 @@
                         <div class="form-group"><label for="articleAuthor">Author Name</label><input type="text" id="articleAuthor" required></div>
                         <div class="form-group"><label for="articleLink">Project or Article Link</label><input type="url" id="articleLink" required></div>
                         <div class="form-group"><label for="articleCategory">Category (Tag)</label><input type="text" id="articleCategory" required placeholder="e.g., FinTech, DeFi, Investment"></div>
+                        <!-- === DATE/TIME INPUT ADDED HERE === -->
+                        <div class="form-group">
+                            <label for="articleDate">Publication Date & Time</label>
+                            <input type="datetime-local" id="articleDate" required>
+                        </div>
                         <div class="form-group">
                             <label for="articleCoverFile">Upload Cover Image</label>
                             <input type="file" id="articleCoverFile" accept="image/*" class="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
@@ -559,7 +568,8 @@
             deleteDoc,
             serverTimestamp,
             query,
-            orderBy
+            orderBy,
+            Timestamp
         } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
         // Your web app's Firebase configuration
@@ -637,7 +647,7 @@
 
             // --- DATA HANDLING (FIRESTORE) ---
             const getArticlesFromFirestore = () => {
-                const q = query(articlesCollection, orderBy('dateAdded', 'desc'));
+                const q = query(articlesCollection, orderBy('publishDate', 'desc'));
                 onSnapshot(q, (snapshot) => {
                     state.articles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     renderCategoryFilters();
@@ -648,7 +658,19 @@
                 });
             };
 
-            // --- UI RENDERING ---
+            // --- UI RENDERING & HELPERS ---
+            const formatPublishDate = (date) => {
+                if (!date) return '';
+                return new Intl.DateTimeFormat('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true
+                }).format(date);
+            };
+
             const renderArticles = () => {
                 const searchTerm = dom.searchInput.value.toLowerCase();
                 let currentArticles = searchTerm
@@ -660,8 +682,8 @@
                 }
 
                 currentArticles.sort((a, b) => {
-                    const dateA = a.dateAdded?.toDate ? a.dateAdded.toDate() : new Date(0);
-                    const dateB = b.dateAdded?.toDate ? b.dateAdded.toDate() : new Date(0);
+                    const dateA = a.publishDate?.toDate ? a.publishDate.toDate() : new Date(0);
+                    const dateB = b.publishDate?.toDate ? b.publishDate.toDate() : new Date(0);
                     switch (state.sortOrder) {
                         case 'oldest': return dateA - dateB;
                         case 'author_az': return a.author.localeCompare(b.author);
@@ -681,6 +703,8 @@
                         card.setAttribute('data-aos', 'fade-up');
                         const placeholderImg = `https://placehold.co/600x400/161b22/c9d1d9?text=${encodeURIComponent(article.category)}`;
                         const excerptHtml = markdownConverter.makeHtml(article.excerpt);
+                        const publishDateObj = article.publishDate?.toDate ? article.publishDate.toDate() : null;
+                        const formattedDate = formatPublishDate(publishDateObj);
                         
                         const adminActions = state.isAdmin ? `
                             <div class="article-actions">
@@ -694,8 +718,11 @@
                                 <img src="${article.cover || placeholderImg}" alt="${article.title}" class="article-cover-image" onerror="this.src='${placeholderImg}';">
                             </a>
                             <div class="article-content">
-                                <a href="${article.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit; display: flex; flex-direction: column; flex-grow: 1;">
+                                <div class="article-top-meta">
                                     <span class="article-category" data-category="${article.category}">${article.category}</span>
+                                    ${formattedDate ? `<span class="article-publish-date">${formattedDate}</span>` : ''}
+                                </div>
+                                <a href="${article.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit; display: flex; flex-direction: column; flex-grow: 1;">
                                     <h3 class="article-title">${article.title}</h3>
                                     <div class="article-excerpt">${excerptHtml}</div>
                                 </a>
@@ -783,6 +810,14 @@
                         }
                     });
                     return;
+                }
+                
+                // Pre-fill date for new articles
+                if (pageId === 'add-article' && !state.editingArticleId) {
+                    const now = new Date();
+                    const timezoneOffset = now.getTimezoneOffset() * 60000;
+                    const localISOTime = new Date(now.getTime() - timezoneOffset).toISOString().slice(0, 16);
+                    document.getElementById('articleDate').value = localISOTime;
                 }
 
                 state.currentPage = pageId;
@@ -963,6 +998,7 @@
                         category: document.getElementById('articleCategory').value.trim(),
                         excerpt: document.getElementById('articleExcerpt').value.trim(),
                         cover: coverUrl,
+                        publishDate: Timestamp.fromDate(new Date(document.getElementById('articleDate').value))
                     };
 
                     if (isUpdating) {
@@ -971,7 +1007,7 @@
                         await updateDoc(articleRef, articleData);
                         showNotification('Article updated successfully!', 'success');
                     } else {
-                        articleData.dateAdded = serverTimestamp();
+                        articleData.dateAdded = serverTimestamp(); // Keep for internal reference
                         await addDoc(articlesCollection, articleData);
                         showNotification('Article published successfully!', 'success');
                     }
@@ -1002,6 +1038,17 @@
                         document.getElementById('articleCategory').value = articleToEdit.category;
                         document.getElementById('existingCoverUrl').value = articleToEdit.cover || '';
                         document.getElementById('articleExcerpt').value = articleToEdit.excerpt;
+                        
+                        // Populate the date input for editing
+                        if (articleToEdit.publishDate && articleToEdit.publishDate.toDate) {
+                            const pubDate = articleToEdit.publishDate.toDate();
+                            const timezoneOffset = pubDate.getTimezoneOffset() * 60000;
+                            const localISOTime = new Date(pubDate.getTime() - timezoneOffset).toISOString().slice(0, 16);
+                            document.getElementById('articleDate').value = localISOTime;
+                        } else {
+                            document.getElementById('articleDate').value = '';
+                        }
+                        
                         dom.formTitle.textContent = 'Update Article';
                         dom.submitBtn.textContent = 'Update Article';
                         navigateTo('add-article');
