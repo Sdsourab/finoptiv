@@ -4,13 +4,13 @@
     <!--
     ================================================================================================
     Finoptiv - The Integrated Financial Intelligence Core
-    Version: 20.0 (Definitive & Complete Edition)
-    Author: Sourab Dey Soptom (Rebuilt & Finalized by Gemini)
+    Version: 21.0 (Feature Update: Tag Analytics)
+    Author: Sourab Dey Soptom
     Date: July 16, 2025
-    Description: The final, complete, and fully functional version of the Finoptiv project. 
-                 This version includes a polished UI, a robust ImgBB upload system with the
-                 user's API key, complete admin functionality, and comprehensive code comments.
-                 This is the definitive build.
+    Description: This version introduces a dynamic tag analytics feature. Category filters now
+                 display the percentage of articles belonging to each tag, with visual indicators
+                 for high-traffic (green) and low-traffic (red) tags. This provides at-a-glance
+                 insight into content distribution.
     ================================================================================================
     -->
     <meta charset="UTF-8">
@@ -195,9 +195,74 @@
         .search-input { width: 100%; padding: 0.8rem 1.2rem; border-radius: 50px; font-size: 1rem; background-color: var(--card-bg-dark); border: 1px solid var(--border-dark); color: var(--text-dark); transition: all 0.3s ease; }
         .search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(138, 99, 210, 0.3); }
         .filter-sort-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
-        .view-toggle button, .sort-select, .category-filters button { background-color: var(--card-bg-dark); border: 1px solid var(--border-dark); color: var(--text-muted); padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; font-family: var(--font-sans); }
-        .view-toggle button.active, .category-filters button.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); font-weight: 600; }
-        .category-filters { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem; justify-content: center; }
+        .view-toggle button, .sort-select { background-color: var(--card-bg-dark); border: 1px solid var(--border-dark); color: var(--text-muted); padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; font-family: var(--font-sans); }
+        .view-toggle button.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); font-weight: 600; }
+        
+        /* CATEGORY FILTERS (TAGS) - UPDATED FOR ANALYTICS */
+        .category-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; justify-content: center; }
+        .category-filters button { 
+            background-color: var(--card-bg-dark); 
+            border: 1px solid var(--border-dark); 
+            color: var(--text-muted); 
+            padding: 0.8rem 1.2rem; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            font-family: var(--font-sans); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+            text-align: center;
+        }
+        .category-filters button:hover {
+             transform: translateY(-3px);
+             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .category-filters button.active { 
+            color: white; 
+            font-weight: 600; 
+            background-color: var(--primary-color);
+            border-color: var(--primary-color); 
+            box-shadow: 0 4px 15px rgba(138, 99, 210, 0.4);
+        }
+        .tag-name {
+            font-weight: 600;
+            font-size: 0.95em;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            z-index: 2;
+        }
+        .tag-percentage {
+            font-size: 0.8em;
+            opacity: 0.9;
+            z-index: 2;
+            font-family: var(--font-secondary);
+        }
+        .tag-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            z-index: 1;
+            transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 0 0 6px 6px;
+        }
+        .category-filters button.tag-high .tag-progress-bar {
+            background: linear-gradient(90deg, var(--success-color), #20c997);
+        }
+        .category-filters button.tag-low .tag-progress-bar {
+            background: linear-gradient(90deg, var(--danger-dark), #ff6a88);
+        }
+        .category-filters button.active .tag-name,
+        .category-filters button.active .tag-percentage {
+            color: white;
+        }
+        .category-filters button.active.tag-high { border-color: var(--success-color); }
+        .category-filters button.active.tag-low { border-color: var(--danger-dark); }
         
         /* ARTICLES GRID & LIST VIEW */
         .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
@@ -648,10 +713,48 @@
             };
 
             const renderCategoryFilters = () => {
-                const categories = ['All', ...new Set(state.articles.map(a => a.category).filter(Boolean))];
-                dom.categoryFilters.innerHTML = categories.map(cat => 
-                    `<button class="${state.activeCategory === cat ? 'active' : ''}" data-category="${cat}">${cat}</button>`
-                ).join('');
+                if (state.articles.length === 0) {
+                    dom.categoryFilters.innerHTML = '';
+                    return;
+                }
+
+                const totalArticles = state.articles.length;
+                const tagCounts = state.articles.reduce((acc, article) => {
+                    if (article.category) {
+                        const cat = article.category.trim();
+                        if (cat) acc[cat] = (acc[cat] || 0) + 1;
+                    }
+                    return acc;
+                }, {});
+
+                const categories = Object.keys(tagCounts);
+                if (categories.length === 0) {
+                    dom.categoryFilters.innerHTML = '';
+                    return;
+                }
+                
+                const averagePercentage = 100 / categories.length;
+
+                let filtersHtml = `<button class="${state.activeCategory === 'All' ? 'active' : ''}" data-category="All"><span class="tag-name">All Articles</span><span class="tag-percentage">${totalArticles} Total</span></button>`;
+
+                categories.sort((a, b) => tagCounts[b] - tagCounts[a]);
+
+                filtersHtml += categories.map(cat => {
+                    const count = tagCounts[cat];
+                    const percentage = (count / totalArticles) * 100;
+                    const colorClass = percentage >= averagePercentage ? 'tag-high' : 'tag-low';
+                    const activeClass = state.activeCategory === cat ? 'active' : '';
+
+                    return `
+                        <button class="${activeClass} ${colorClass}" data-category="${cat}">
+                            <span class="tag-name">${cat}</span>
+                            <span class="tag-percentage">${percentage.toFixed(1)}%</span>
+                            <div class="tag-progress-bar" style="width: ${percentage.toFixed(1)}%;"></div>
+                        </button>
+                    `;
+                }).join('');
+
+                dom.categoryFilters.innerHTML = filtersHtml;
             };
 
             const renderSocials = () => {
@@ -776,8 +879,9 @@
             dom.mobileMenuOverlay.addEventListener('click', closeMobileMenu);
             dom.searchInput.addEventListener('input', () => { state.visibleArticleCount = state.articlesPerLoad; renderArticles(); });
             dom.categoryFilters.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    state.activeCategory = e.target.dataset.category;
+                const button = e.target.closest('button');
+                if (button) {
+                    state.activeCategory = button.dataset.category;
                     state.visibleArticleCount = state.articlesPerLoad;
                     renderCategoryFilters();
                     renderArticles();
